@@ -1,10 +1,37 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ParseQuery } from '../guards/middleware/parse-query';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(protected usersService: UsersService) {}
   @Get()
-  getUsers(@Query() query) {
-    return [{ id: 1 }, { id: 2 }];
+  async getUsers(@Query() query) {
+    const allQuery = ParseQuery.getPaginationData(query);
+    const pageNumber: number = allQuery.pageNumber;
+    const pageSize: number = allQuery.pageSize;
+    const searchLoginTerm: string | null = allQuery.searchLoginTerm;
+    const searchEmailTerm: string | null = allQuery.searchEmailTerm;
+    const sortBy: string | null = allQuery.sortBy;
+    const sortDirection: string | null = allQuery.sortDirection;
+    const users = await this.usersService.findUsers(
+      pageNumber,
+      pageSize,
+      sortBy,
+      sortDirection,
+      searchLoginTerm,
+      searchEmailTerm,
+    );
+    if (!users) throw new HttpException('Not found', 404);
+    return users;
   }
   @Get(':id')
   getUsersById(@Param('id') userId: string) {
