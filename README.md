@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
@@ -65,7 +65,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Serge Hall]
+- Author - Serge Hall
 - Website - [https://sergioartg.com](https://sergioartg.com/)
 - Instagram - [@sergioartg](https://www.instagram.com/sergioartg/)
 
@@ -77,9 +77,5 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
-=======
-My first steps work with NodeJS, Express, NestJS, Swagger, MongoDB, PostgreSQL, Microservices, RabbitMQ, WebSocket, DevOps basics (docker + kubernetes + jenkins), SOLID, Hexagonal architecture, SAGA,front-end basics.
 
-I am a student of a wonderful team "IT-KAMASUTRA" that give education to the front-end and back-end. These are my first steps in this area and the project is being written from scratch with the knowledge gained here. I highly recommend this team to everyone 
- https://it-incubator.ru
->>>>>>> origin/main
+
