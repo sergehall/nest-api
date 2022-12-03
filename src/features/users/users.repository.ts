@@ -5,13 +5,13 @@ import {
   EmailRecoveryCodeType,
   EntityQuery,
   UserType,
-} from '../types/types';
+} from '../../types/types';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UsersRepository {
   constructor(
-    @InjectModel('Users') private usersModel: mongoose.Model<UserType>,
+    @InjectModel('users') private usersModel: mongoose.Model<UserType>,
   ) {}
 
   async findUsers(entityFindUsers: EntityQuery): Promise<UserType[]> {

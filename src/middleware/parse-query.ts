@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { sortDirectArr, SortOrder } from '../../types/types';
+import { sortDirectArr, SortOrder } from '../types/types';
 
 @Injectable()
 export class ParseQuery {

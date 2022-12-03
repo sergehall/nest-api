@@ -6,7 +6,7 @@ export type ErrorType = {
   field: string;
 };
 export type ArrayErrorsType = ErrorType[];
-//...............................................Pagination
+//...............................................Pagination Query
 export type Pagination = {
   pagesCount: number;
   page: number;
@@ -32,6 +32,11 @@ export type EntityQuery = {
 };
 export const sortDirectArr = [-1, 1, 'descending', 'desc', 'ascending', 'asc'];
 //...............................................User
+export type CreateUserInputModelType = {
+  login: string;
+  password: string;
+  email: string;
+};
 export type UserType = {
   accountData: {
     id: string;
@@ -78,13 +83,12 @@ export type UserTestType = {
     createdAt: string;
   };
 };
-export type DTOUsers = {
-  filterLogin: string;
-  filterEmail: string;
-  pageSize: number;
-  startIndex: number;
-  field: string;
-  direction: -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+export type DTONewUser = {
+  login: string;
+  password: string;
+  email: string;
+  userAgent: string;
+  clientIp: string;
 };
 //...............................................Blogs
 export type BlogsType = {
@@ -102,7 +106,7 @@ export type DTOBlogsType = {
   pageSize: number;
   startIndex: number;
   field: string;
-  direction: -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+  direction: SortOrder;
 };
 //...............................................Posts
 export type PostsType = {
@@ -133,14 +137,14 @@ export type DTOPosts = {
   pageSize: number;
   startIndex: number;
   field: string;
-  direction: -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+  direction: SortOrder;
 };
 export type DTOFindPostsByBlogId = {
   blogId: string;
   pageSize: number;
   startIndex: number;
   field: string;
-  direction: -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+  direction: SortOrder;
 };
 //...............................................Comments
 export type CommentType = {

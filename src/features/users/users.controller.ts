@@ -3,13 +3,21 @@ import {
   Controller,
   Get,
   HttpException,
+  Ip,
   Param,
   Post,
   Query,
+  Req,
 } from '@nestjs/common';
-import { ParseQuery } from '../guards/middleware/parse-query';
+import { ParseQuery } from '../../middleware/parse-query';
 import { UsersService } from './users.service';
-import { DTOQuery, SortOrder } from '../types/types';
+import {
+  CreateUserInputModelType,
+  DTONewUser,
+  DTOQuery,
+  SortOrder,
+} from '../../types/types';
+import { Request } from 'express';
 
 @Controller('users')
 export class UsersController {
@@ -36,22 +44,25 @@ export class UsersController {
     return users;
   }
   @Get(':id')
-  getUsersById(@Param('id') userId: string) {
+  async getUsersById(@Param('id') userId: string) {
     return [{ id: 1 }, { id: 2 }].find((i) => i.id === +userId);
   }
   @Post()
-  createUsers(@Body() inputModel: CreateUserInputModelType) {
-    return [
-      {
-        id: 12,
-        name: inputModel.name,
-        childrenCount: inputModel.childrenCount,
-      },
-    ];
+  async createUsers(
+    @Body() inputModel: CreateUserInputModelType,
+    @Req() req: Request,
+    @Ip() ip,
+  ) {
+    const userAgent = req.headers['user-agent']
+      ? `${req.headers['user-agent']}`
+      : '';
+    const dtoNewUser: DTONewUser = {
+      login: inputModel.login,
+      password: inputModel.password,
+      email: inputModel.email,
+      userAgent: userAgent,
+      clientIp: ip,
+    };
+    return await this.usersService.createUser(dtoNewUser);
   }
 }
-
-type CreateUserInputModelType = {
-  name: string;
-  childrenCount: number;
-};

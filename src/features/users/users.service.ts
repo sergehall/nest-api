@@ -1,15 +1,17 @@
-import uuid4 from 'uuid4';
-import add from 'date-fns/add';
-import bcrypt from 'bcrypt';
+import * as dotenv from 'dotenv';
+dotenv.config();
+import * as bcrypt from 'bcrypt';
+import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
 import {
+  DTONewUser,
   DTOQuery,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   EntityQuery,
   Pagination,
   UserType,
-} from '../types/types';
+} from '../../types/types';
 import { UsersRepository } from './users.repository';
 import { EmailsRepository } from '../emails/emails.repository';
 
@@ -63,19 +65,13 @@ export class UsersService {
     };
   }
 
-  async createUser(
-    login: string,
-    email: string,
-    password: string,
-    clientIp: string | null,
-    userAgent: string,
-  ): Promise<UserType | null> {
+  async createUser(dtoNewUser: DTONewUser): Promise<UserType | null> {
     const newUser: UserType = await this._createNewUser(
-      login,
-      password,
-      email,
-      clientIp,
-      userAgent,
+      dtoNewUser.login,
+      dtoNewUser.password,
+      dtoNewUser.email,
+      dtoNewUser.clientIp,
+      dtoNewUser.userAgent,
     );
     return await this.usersRepository.createOrUpdateUser(newUser);
   }
@@ -198,10 +194,10 @@ export class UsersService {
     if (!user.emailConfirmation.isConfirmed) {
       if (user.emailConfirmation.expirationDate > new Date().toISOString()) {
         user.emailConfirmation.confirmationCode = uuid4().toString();
-        user.emailConfirmation.expirationDate = add(new Date(), {
-          hours: 1,
-          minutes: 5,
-        }).toString();
+        // expiration date in an 1 hour 5 min
+        user.emailConfirmation.expirationDate = new Date(
+          Date.now() + 65 * 60 * 1000,
+        ).toISOString();
         // update user
         await this.usersRepository.updateUserConfirmationCode(user);
 
@@ -255,16 +251,14 @@ export class UsersService {
     ip: string | null,
     userAgent: string,
   ) {
-    const passwordSalt = await bcrypt.genSalt(Number(process.env.SALT_FACTOR));
-    const passwordHash = await this._generateHash(password, passwordSalt);
+    const saltRounds = Number(process.env.SALT_FACTOR);
+    const saltHash = await bcrypt.genSalt(saltRounds);
+    const passwordHash = await this._generateHash(password, saltHash);
     const id = uuid4().toString();
     const currentTime = new Date().toISOString();
     const confirmationCode = uuid4().toString();
-    const expirationDate = add(new Date(), {
-      hours: 1,
-      minutes: 5,
-    }).toISOString();
-
+    // expiration date in an 1 hour 5 min
+    const expirationDate = new Date(Date.now() + 65 * 60 * 1000).toISOString();
     return {
       accountData: {
         id: id,
@@ -286,7 +280,7 @@ export class UsersService {
     };
   }
 
-  async _generateHash(password: string, salt: string) {
-    return await bcrypt.hash(password, salt);
+  async _generateHash(password: string, saltHash: string) {
+    return await bcrypt.hash(password, saltHash);
   }
 }
