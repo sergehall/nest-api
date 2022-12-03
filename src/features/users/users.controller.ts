@@ -9,7 +9,7 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { ParseQuery } from '../../middleware/parse-query';
+import { ParseQuery } from '../../common/queries/parse-query';
 import { UsersService } from './users.service';
 import {
   CreateUserInputModelType,
