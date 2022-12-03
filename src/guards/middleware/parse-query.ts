@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { sortDirectArr, SortOrder } from '../../types/types';
 
 @Injectable()
 export class ParseQuery {
@@ -18,8 +19,7 @@ export class ParseQuery {
     let confirmationCode: string | undefined | null =
       query.sonfirmationCode?.toString();
     let sortBy: string | undefined | null = query.sortBy?.toString();
-    let sortDirection: string | undefined | null =
-      query.sortDirection?.toString();
+    let sortDirection: SortOrder = query.sortDirection;
 
     if (!searchNameTerm || searchNameTerm.length === 0) {
       searchNameTerm = null;
@@ -54,9 +54,8 @@ export class ParseQuery {
     if (!sortBy || sortBy.length === 0) {
       sortBy = null;
     }
-
-    if (!sortDirection || sortDirection.length === 0) {
-      sortDirection = null;
+    if (!sortDirection || !sortDirectArr.includes(sortDirection)) {
+      sortDirection = -1;
     }
     return {
       pageNumber: pageNumber,

@@ -1,13 +1,12 @@
 import uuid4 from 'uuid4';
-import * as dotenv from 'dotenv';
-dotenv.config();
 import add from 'date-fns/add';
 import bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import {
-  DTOUsers,
+  DTOQuery,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
+  EntityQuery,
   Pagination,
   UserType,
 } from '../types/types';
@@ -21,50 +20,43 @@ export class UsersService {
     protected emailsRepository: EmailsRepository,
   ) {}
 
-  async findUsers(
-    pageNumber: number,
-    pageSize: number,
-    sortBy: string | null,
-    sortDirection: string | null,
-    searchLoginTerm: string | null,
-    searchEmailTerm: string | null,
-  ): Promise<Pagination> {
+  async findUsers(dtoQuery: DTOQuery): Promise<Pagination> {
+    const startIndex = (dtoQuery.pageNumber - 1) * dtoQuery.pageSize;
+    const pageSize = dtoQuery.pageSize;
+    let field = 'createdAt';
+    if (dtoQuery.sortBy === 'login' || dtoQuery.sortBy === 'email') {
+      field = 'accountData.' + dtoQuery.sortBy;
+    }
+    const direction = dtoQuery.sortDirection;
     let filterLogin = '';
-    if (searchLoginTerm) {
-      filterLogin = searchLoginTerm;
+    if (dtoQuery.searchLoginTerm) {
+      filterLogin = dtoQuery.searchLoginTerm;
     }
     let filterEmail = '';
-    if (searchEmailTerm) {
-      filterEmail = searchEmailTerm;
+    if (dtoQuery.searchEmailTerm) {
+      filterEmail = dtoQuery.searchEmailTerm;
     }
-    const startIndex = (pageNumber - 1) * pageSize;
-    const direction = sortDirection === 'desc' ? -1 : 1;
-    let field = 'createdAt';
-
-    if (sortBy === 'login' || sortBy === 'email') {
-      field = 'accountData.' + sortBy;
-    }
-    const dtoFindUsers: DTOUsers = {
-      filterLogin,
-      filterEmail,
-      pageSize,
+    const entityFindUsers: EntityQuery = {
       startIndex,
+      pageSize,
       field,
       direction,
+      filterLogin,
+      filterEmail,
     };
 
-    const users = await this.usersRepository.findUsers(dtoFindUsers);
-
+    const users = await this.usersRepository.findUsers(entityFindUsers);
+    // count documents by filterLogin and filterEmail
     const filters = [
-      { 'accountData.login': { $regex: dtoFindUsers.filterLogin } },
-      { 'accountData.email': { $regex: dtoFindUsers.filterEmail } },
+      { 'accountData.login': { $regex: filterLogin } },
+      { 'accountData.email': { $regex: filterEmail } },
     ];
     const countDocuments = await this.usersRepository.countDocuments(filters);
 
     const pagesCount = Math.ceil(countDocuments / pageSize);
     return {
       pagesCount: pagesCount,
-      page: pageNumber,
+      page: dtoQuery.pageNumber,
       pageSize: pageSize,
       totalCount: countDocuments,
       items: users,

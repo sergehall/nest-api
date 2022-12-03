@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ParseQuery } from '../guards/middleware/parse-query';
 import { UsersService } from './users.service';
+import { DTOQuery, SortOrder } from '../types/types';
 
 @Controller('users')
 export class UsersController {
@@ -21,15 +22,16 @@ export class UsersController {
     const searchLoginTerm: string | null = allQuery.searchLoginTerm;
     const searchEmailTerm: string | null = allQuery.searchEmailTerm;
     const sortBy: string | null = allQuery.sortBy;
-    const sortDirection: string | null = allQuery.sortDirection;
-    const users = await this.usersService.findUsers(
+    const sortDirection: SortOrder = allQuery.sortDirection;
+    const dtoQuery: DTOQuery = {
       pageNumber,
       pageSize,
       sortBy,
       sortDirection,
       searchLoginTerm,
       searchEmailTerm,
-    );
+    };
+    const users = await this.usersService.findUsers(dtoQuery);
     if (!users) throw new HttpException('Not found', 404);
     return users;
   }

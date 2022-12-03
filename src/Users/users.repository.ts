@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import {
-  DTOUsers,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
+  EntityQuery,
   UserType,
 } from '../types/types';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,13 +14,13 @@ export class UsersRepository {
     @InjectModel('Users') private usersModel: mongoose.Model<UserType>,
   ) {}
 
-  async findUsers(dtoFindUsers: DTOUsers): Promise<UserType[]> {
+  async findUsers(entityFindUsers: EntityQuery): Promise<UserType[]> {
     return await this.usersModel
       .find(
         {
           $and: [
-            { 'accountData.login': { $regex: dtoFindUsers.filterLogin } },
-            { 'accountData.email': { $regex: dtoFindUsers.filterEmail } },
+            { 'accountData.login': { $regex: entityFindUsers.filterLogin } },
+            { 'accountData.email': { $regex: entityFindUsers.filterEmail } },
           ],
         },
         {
@@ -32,9 +32,9 @@ export class UsersRepository {
           registrationData: false,
         },
       )
-      .limit(dtoFindUsers.pageSize)
-      .skip(dtoFindUsers.startIndex)
-      .sort({ [dtoFindUsers.field]: dtoFindUsers.direction })
+      .limit(entityFindUsers.pageSize)
+      .skip(entityFindUsers.startIndex)
+      .sort({ [entityFindUsers.field]: entityFindUsers.direction })
       .lean();
   }
   async createOrUpdateUser(user: UserType): Promise<UserType | null> {

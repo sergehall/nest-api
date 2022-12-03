@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-
+export type SortOrder = -1 | 1 | 'descending' | 'desc' | 'ascending' | 'asc';
 //...............................................Errors
 export type ErrorType = {
   message: string;
@@ -14,6 +14,23 @@ export type Pagination = {
   totalCount: number;
   items: PostsType[] | CommentType[] | BlogsType[] | UserType[];
 };
+export type DTOQuery = {
+  pageNumber: number;
+  pageSize: number;
+  sortBy: string;
+  sortDirection: SortOrder;
+  searchLoginTerm: string;
+  searchEmailTerm: string;
+};
+export type EntityQuery = {
+  startIndex: number;
+  pageSize: number;
+  field: string;
+  direction: SortOrder;
+  filterLogin: string;
+  filterEmail: string;
+};
+export const sortDirectArr = [-1, 1, 'descending', 'desc', 'ascending', 'asc'];
 //...............................................User
 export type UserType = {
   accountData: {

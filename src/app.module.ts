@@ -12,15 +12,21 @@ import { EmailsRepository } from './emails/emails.repository';
 import { UsersRepository } from './Users/users.repository';
 import { DatabaseModule } from './conection/db.module';
 
-const collection = 'Users';
-
 @Module({
   imports: [
     DatabaseModule,
     MongooseModule.forFeature([
-      { name: 'Users', schema: UserSchema, collection },
-      { name: 'MyModelEmailsConfirmCode', schema: EmailsToSentSchema },
-      { name: 'MyModelEmailsRecoveryCode', schema: EmailsRecoveryCodeSchema },
+      { name: 'Users', schema: UserSchema, collection: 'Users' },
+      {
+        name: 'MyModelEmailsConfirmCode',
+        schema: EmailsToSentSchema,
+        collection: 'EmailsConfirmationCode',
+      },
+      {
+        name: 'MyModelEmailsRecoveryCode',
+        schema: EmailsRecoveryCodeSchema,
+        collection: 'EmailsRecoveryCode',
+      },
     ]),
   ],
   controllers: [AppController, UsersController],
