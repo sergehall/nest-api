@@ -14,21 +14,22 @@ export type Pagination = {
   totalCount: number;
   items: PostsType[] | CommentType[] | BlogsType[] | UserType[];
 };
-export type DTOQuery = {
+export type QueryDTOType = {
   pageNumber: number;
   pageSize: number;
   sortBy: string;
   sortDirection: SortOrder;
-  searchLoginTerm: string;
-  searchEmailTerm: string;
+  searchLoginTerm?: string;
+  searchEmailTerm?: string;
+  searchNameTerm?: string;
 };
 export type EntityQueryType = {
   startIndex: number;
   pageSize: number;
   field: string;
   direction: SortOrder;
-  filterLogin: string;
-  filterEmail: string;
+  filterLogin?: string;
+  filterEmail?: string;
 };
 export const sortDirectArr = [-1, 1, 'descending', 'desc', 'ascending', 'asc'];
 //...............................................User

@@ -15,8 +15,7 @@ import { UsersService } from './users.service';
 import {
   CreateUserInputModelType,
   DTONewUser,
-  DTOQuery,
-  SortOrder,
+  QueryDTOType,
 } from '../../types/types';
 import { Request } from 'express';
 
@@ -32,8 +31,8 @@ export class UsersController {
     const searchLoginTerm = allQuery.searchLoginTerm;
     const searchEmailTerm = allQuery.searchEmailTerm;
     const sortBy = allQuery.sortBy;
-    const sortDirection: SortOrder = allQuery.sortDirection;
-    const dtoQuery: DTOQuery = {
+    const sortDirection = allQuery.sortDirection;
+    const dtoQuery: QueryDTOType = {
       pageNumber,
       pageSize,
       sortBy,

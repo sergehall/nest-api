@@ -1,9 +1,47 @@
 import { BlogsService } from './blogs.service';
-import { Body, Controller, Post } from '@nestjs/common';
-import { BlogsDTOType, CreateBlogInputModelType } from '../../types/types';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import {
+  BlogsDTOType,
+  CreateBlogInputModelType,
+  QueryDTOType,
+} from '../../types/types';
+import { ParseQuery } from '../../common/queries/parse-query';
 @Controller('blogs')
 export class BlogsController {
   constructor(protected blogsService: BlogsService) {}
+  @Get()
+  async findAllBlogs(@Query() query) {
+    const allQuery = ParseQuery.getPaginationData(query);
+    const searchNameTerm = allQuery.searchNameTerm;
+    const pageNumber = allQuery.pageNumber;
+    const pageSize = allQuery.pageSize;
+    const sortBy = allQuery.sortBy;
+    const sortDirection = allQuery.sortDirection;
+    const dtoQuery: QueryDTOType = {
+      searchNameTerm,
+      pageNumber,
+      pageSize,
+      sortBy,
+      sortDirection,
+    };
+    return await this.blogsService.findBlogs(dtoQuery);
+  }
+  @Get(':id')
+  async findBlogById(@Param('id') blogId: string) {
+    const blog = await this.blogsService.findBlogById(blogId);
+    if (!blog) throw new HttpException('Not found', 404);
+    return blog;
+  }
   @Post()
   async createNewBlog(@Body() inputModel: CreateBlogInputModelType) {
     const blogDTO: BlogsDTOType = {
@@ -12,24 +50,25 @@ export class BlogsController {
       websiteUrl: inputModel.websiteUrl,
     };
     return await this.blogsService.createBlogs(blogDTO);
-    // try {
-    //   const name = req.body.name;
-    //   const websiteUrl = req.body.websiteUrl
-    //
-    //   const newBlog = await this.blogsService.createBlog(name, websiteUrl);
-    //   if (newBlog.data && newBlog.data.name) {
-    //     res.status(201)
-    //     res.send({
-    //         id: newBlog.data.id,
-    //         name: newBlog.data.name,
-    //         websiteUrl: newBlog.data.websiteUrl,
-    //         createdAt: newBlog.data.createdAt
-    //       }
-    //     )
-    //   }
-    //
-    // } catch (error) {
-    //   return res.sendStatus(500)
-    // }
+  }
+  @Put(':id')
+  async updateBlogById(
+    @Param('id') id: string,
+    @Body() inputModel: CreateBlogInputModelType,
+  ) {
+    const updateBlogDTO: BlogsDTOType = {
+      name: inputModel.name,
+      description: inputModel.description,
+      websiteUrl: inputModel.websiteUrl,
+    };
+    const blog = await this.blogsService.updateBlogById(id, updateBlogDTO);
+    if (!blog) throw new HttpException('Not found', 404);
+    return blog;
+  }
+  @Delete(':id')
+  async deleteBlogById(@Param('id') id: string) {
+    const deletedPost = await this.blogsService.deleteBlogById(id);
+    if (!deletedPost) throw new HttpException('Not found', 404);
+    return deletedPost;
   }
 }

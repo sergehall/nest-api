@@ -4,22 +4,18 @@ import { sortDirectArr, SortOrder } from '../../types/types';
 @Injectable()
 export class ParseQuery {
   static getPaginationData(query) {
-    let pageNumber: number = parseInt(<string>query.pageNumber);
-    let pageSize: number = parseInt(<string>query.pageSize);
-    let searchNameTerm: string | undefined | null =
-      query.searchNameTerm?.toString();
-    let searchLoginTerm: string | undefined | null =
-      query.searchLoginTerm?.toString();
-    let searchEmailTerm: string | undefined | null =
-      query.searchEmailTerm?.toString();
-    let title: string | undefined | null = query.sitle?.toString();
-    let userName: string | undefined | null = query.searchName?.toString();
-    let searchTitle: string | undefined | null = query.searchTitle?.toString();
-    let code: string | undefined | null = query.sode?.toString();
-    let confirmationCode: string | undefined | null =
-      query.sonfirmationCode?.toString();
-    let sortBy: string | undefined | null = query.sortBy?.toString();
-    let sortDirection: SortOrder = query.sortDirection;
+    let pageNumber = parseInt(<string>query.pageNumber);
+    let pageSize = parseInt(<string>query.pageSize);
+    let searchNameTerm = query.searchNameTerm?.toString();
+    let searchLoginTerm = query.searchLoginTerm?.toString();
+    let searchEmailTerm = query.searchEmailTerm?.toString();
+    let title = query.sitle?.toString();
+    let userName = query.searchName?.toString();
+    let searchTitle = query.searchTitle?.toString();
+    let code = query.sode?.toString();
+    let confirmationCode = query.sonfirmationCode?.toString();
+    let sortBy = query.sortBy?.toString();
+    let sortDirection: SortOrder = query?.sortDirection;
 
     if (!searchNameTerm || searchNameTerm.length === 0) {
       searchNameTerm = null;

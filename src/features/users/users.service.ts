@@ -5,11 +5,11 @@ import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
 import {
   DTONewUser,
-  DTOQuery,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   EntityQueryType,
   Pagination,
+  QueryDTOType,
   UserType,
 } from '../../types/types';
 import { UsersRepository } from './users.repository';
@@ -22,7 +22,7 @@ export class UsersService {
     protected emailsRepository: EmailsRepository,
   ) {}
 
-  async findUsers(dtoQuery: DTOQuery): Promise<Pagination> {
+  async findUsers(dtoQuery: QueryDTOType): Promise<Pagination> {
     const startIndex = (dtoQuery.pageNumber - 1) * dtoQuery.pageSize;
     const pageSize = dtoQuery.pageSize;
     let field = 'createdAt';
