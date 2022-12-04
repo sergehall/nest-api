@@ -9,11 +9,11 @@ import {
   LikeStatusPostsIdSchema,
   PostsSchema,
   UserSchema,
-} from './infrastructure/database/schemes';
+} from './infrastructure/schemes/schemes';
 import { UsersService } from './features/users/users.service';
 import { EmailsRepository } from './features/emails/emails.repository';
 import { UsersRepository } from './features/users/users.repository';
-import { DatabaseModule } from './conection/db.module';
+import { DatabaseModule } from './infrastructure/conection/db.module';
 import { TestingController } from './features/testing  /testing.controller';
 import { TestingService } from './features/testing  /testing.service';
 import { TestingRepository } from './features/testing  /testing.repository';

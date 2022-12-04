@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { runDb } from './conection/db-connect';
+import { runDb } from './infrastructure/conection/db-connect';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 dotenv.config();
