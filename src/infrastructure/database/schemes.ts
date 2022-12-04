@@ -3,6 +3,7 @@ import {
   BlogsEntityType,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
+  likeStatusPostsIdType,
   UserType,
 } from '../../types/types';
 
@@ -96,6 +97,7 @@ export const EmailsToSentSchema = new mongoose.Schema<EmailConfirmCodeType>({
     required: [true, 'createdAt is required'],
   },
 });
+
 export const EmailsRecoveryCodeSchema =
   new mongoose.Schema<EmailRecoveryCodeType>({
     email: {
@@ -109,5 +111,92 @@ export const EmailsRecoveryCodeSchema =
     createdAt: {
       type: String,
       required: [true, 'Id is required'],
+    },
+  });
+
+export const PostsSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: [true, 'Id is required!!!'],
+  },
+  title: {
+    type: String,
+    required: [true, 'title is required'],
+  },
+  shortDescription: {
+    type: String,
+    required: [true, 'shortDescription is required'],
+  },
+  content: {
+    type: String,
+    required: [true, 'content is required'],
+  },
+  blogId: {
+    type: String,
+    required: [true, 'blogId is required'],
+  },
+  blogName: {
+    type: String,
+    required: [true, 'blogName is required'],
+  },
+  createdAt: {
+    type: String,
+    required: [true, 'addedAt is required'],
+  },
+  extendedLikesInfo: {
+    likesCount: {
+      type: Number,
+      required: [true, 'likesCount is required'],
+    },
+    dislikesCount: {
+      type: Number,
+      required: [true, 'dislikesCount is required'],
+    },
+    myStatus: {
+      type: String,
+      required: [true, 'myStatus is required'],
+    },
+    newestLikes: {
+      type: Array({
+        addedAt: {
+          type: String,
+          required: [true, 'addedAt is required'],
+        },
+        userId: {
+          type: String,
+          required: [true, 'userId is required'],
+        },
+        login: {
+          type: String,
+          required: [true, 'login is required'],
+        },
+      }),
+      validate: (v: any) => Array.isArray(v),
+    },
+  },
+});
+
+export const LikeStatusPostsIdSchema =
+  new mongoose.Schema<likeStatusPostsIdType>({
+    postId: {
+      type: String,
+      required: [true, 'postId is required'],
+    },
+    userId: {
+      type: String,
+      required: [true, 'userId is required'],
+    },
+    login: {
+      type: String,
+      required: [true, 'login is required'],
+    },
+    likeStatus: {
+      type: String,
+      enum: ['Like', 'Dislike', 'None'],
+      required: [true, 'likeStatus is required'],
+    },
+    addedAt: {
+      type: String,
+      required: [true, 'addedAt is required'],
     },
   });

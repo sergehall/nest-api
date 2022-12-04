@@ -6,6 +6,8 @@ import {
   BlogsSchema,
   EmailsRecoveryCodeSchema,
   EmailsToSentSchema,
+  LikeStatusPostsIdSchema,
+  PostsSchema,
   UserSchema,
 } from './infrastructure/database/schemes';
 import { UsersService } from './features/users/users.service';
@@ -18,6 +20,10 @@ import { TestingRepository } from './features/testing  /testing.repository';
 import { BlogsController } from './features/blogs/blogs.controller';
 import { BlogsService } from './features/blogs/blogs.service';
 import { BlogsRepository } from './features/blogs/blogs.repository';
+import { PostsController } from './features/posts/posts.controller';
+import { PostsService } from './features/posts/posts.service';
+import { PostsRepository } from './features/posts/posts.repository';
+import { PreparationPosts } from './features/posts/preparationPosts/posts.preperation';
 
 @Module({
   imports: [
@@ -25,6 +31,7 @@ import { BlogsRepository } from './features/blogs/blogs.repository';
     MongooseModule.forFeature([
       { name: 'users', schema: UserSchema, collection: 'Users' },
       { name: 'blogs', schema: BlogsSchema, collection: 'Blogs' },
+      { name: 'posts', schema: PostsSchema, collection: 'Posts' },
       {
         name: 'MyModelEmailsConfirmCode',
         schema: EmailsToSentSchema,
@@ -35,12 +42,18 @@ import { BlogsRepository } from './features/blogs/blogs.repository';
         schema: EmailsRecoveryCodeSchema,
         collection: 'EmailsRecoveryCode',
       },
+      {
+        name: 'likeStatusPosts',
+        schema: LikeStatusPostsIdSchema,
+        collection: 'LikeStatusPosts',
+      },
     ]),
   ],
   controllers: [
     AppController,
-    UsersController,
     BlogsController,
+    PostsController,
+    UsersController,
     TestingController,
   ],
   providers: [
@@ -51,6 +64,9 @@ import { BlogsRepository } from './features/blogs/blogs.repository';
     TestingRepository,
     BlogsService,
     BlogsRepository,
+    PostsService,
+    PostsRepository,
+    PreparationPosts,
   ],
 })
 export class AppModule {}

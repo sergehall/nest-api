@@ -164,6 +164,18 @@ export type DTOFindPostsByBlogId = {
   field: string;
   direction: SortOrder;
 };
+export type CreatePostInputModelType = {
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+};
+export type DTOPost = {
+  title: string;
+  shortDescription: string;
+  content: string;
+  blogId: string;
+};
 //...............................................Comments
 export type CommentType = {
   id: string;
