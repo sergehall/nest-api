@@ -11,6 +11,9 @@ import { UsersService } from './features/users/users.service';
 import { EmailsRepository } from './features/emails/emails.repository';
 import { UsersRepository } from './features/users/users.repository';
 import { DatabaseModule } from './conection/db.module';
+import { TestingController } from './features/testing  /testing.controller';
+import { TestingService } from './features/testing  /testing.service';
+import { TestingRepository } from './features/testing  /testing.repository';
 
 @Module({
   imports: [
@@ -29,7 +32,13 @@ import { DatabaseModule } from './conection/db.module';
       },
     ]),
   ],
-  controllers: [AppController, UsersController],
-  providers: [UsersService, EmailsRepository, UsersRepository],
+  controllers: [AppController, UsersController, TestingController],
+  providers: [
+    UsersService,
+    EmailsRepository,
+    UsersRepository,
+    TestingService,
+    TestingRepository,
+  ],
 })
 export class AppModule {}

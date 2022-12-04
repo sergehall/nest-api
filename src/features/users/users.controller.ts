@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Ip,
@@ -22,14 +23,15 @@ import { Request } from 'express';
 @Controller('users')
 export class UsersController {
   constructor(protected usersService: UsersService) {}
+
   @Get()
   async getUsers(@Query() query) {
     const allQuery = ParseQuery.getPaginationData(query);
-    const pageNumber: number = allQuery.pageNumber;
-    const pageSize: number = allQuery.pageSize;
-    const searchLoginTerm: string | null = allQuery.searchLoginTerm;
-    const searchEmailTerm: string | null = allQuery.searchEmailTerm;
-    const sortBy: string | null = allQuery.sortBy;
+    const pageNumber = allQuery.pageNumber;
+    const pageSize = allQuery.pageSize;
+    const searchLoginTerm = allQuery.searchLoginTerm;
+    const searchEmailTerm = allQuery.searchEmailTerm;
+    const sortBy = allQuery.sortBy;
     const sortDirection: SortOrder = allQuery.sortDirection;
     const dtoQuery: DTOQuery = {
       pageNumber,
@@ -43,10 +45,12 @@ export class UsersController {
     if (!users) throw new HttpException('Not found', 404);
     return users;
   }
+
   @Get(':id')
   async getUsersById(@Param('id') userId: string) {
     return [{ id: 1 }, { id: 2 }].find((i) => i.id === +userId);
   }
+
   @Post()
   async createUsers(
     @Body() inputModel: CreateUserInputModelType,
@@ -63,6 +67,20 @@ export class UsersController {
       userAgent: userAgent,
       clientIp: ip,
     };
-    return await this.usersService.createUser(dtoNewUser);
+    const newUser = await this.usersService.createUser(dtoNewUser);
+    if (!newUser) throw new HttpException('Bad request', 400);
+    return {
+      id: newUser.accountData.id,
+      login: newUser.accountData.login,
+      email: newUser.accountData.email,
+      createdAt: newUser.accountData.createdAt,
+    };
+  }
+
+  @Delete(':id')
+  async deleteUserById(@Param('id') id: string) {
+    const deletedPost = await this.usersService.deleteUserById(id);
+    if (!deletedPost) throw new HttpException('Not found', 404);
+    return deletedPost;
   }
 }
