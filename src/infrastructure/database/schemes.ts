@@ -1,9 +1,33 @@
 import mongoose from 'mongoose';
 import {
+  BlogsEntityType,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   UserType,
 } from '../../types/types';
+
+export const BlogsSchema = new mongoose.Schema<BlogsEntityType>({
+  id: {
+    type: String,
+    required: [true, 'id is required'],
+  },
+  name: {
+    type: String,
+    required: [true, 'name is required'],
+  },
+  description: {
+    type: String,
+    required: [true, 'description is required'],
+  },
+  websiteUrl: {
+    type: String,
+    required: [true, 'websiteUrl is required'],
+  },
+  createdAt: {
+    type: String,
+    required: [true, 'createdAt is required'],
+  },
+});
 
 export const UserSchema = new mongoose.Schema<UserType>({
   accountData: {

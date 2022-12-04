@@ -22,7 +22,7 @@ export type DTOQuery = {
   searchLoginTerm: string;
   searchEmailTerm: string;
 };
-export type EntityQuery = {
+export type EntityQueryType = {
   startIndex: number;
   pageSize: number;
   field: string;
@@ -107,6 +107,23 @@ export type DTOBlogsType = {
   startIndex: number;
   field: string;
   direction: SortOrder;
+};
+export type CreateBlogInputModelType = {
+  name: string;
+  description: string;
+  websiteUrl: string;
+};
+export type BlogsDTOType = {
+  name: string;
+  description: string;
+  websiteUrl: string;
+};
+export type BlogsEntityType = {
+  id: string;
+  name: string;
+  description: string;
+  websiteUrl: string;
+  createdAt: string;
 };
 //...............................................Posts
 export type PostsType = {

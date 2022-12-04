@@ -8,7 +8,7 @@ import {
   DTOQuery,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
-  EntityQuery,
+  EntityQueryType,
   Pagination,
   UserType,
 } from '../../types/types';
@@ -38,7 +38,7 @@ export class UsersService {
     if (dtoQuery.searchEmailTerm) {
       filterEmail = dtoQuery.searchEmailTerm;
     }
-    const entityFindUsers: EntityQuery = {
+    const entityFindUsers: EntityQueryType = {
       startIndex,
       pageSize,
       field,

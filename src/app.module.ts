@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { UsersController } from './features/users/users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
+  BlogsSchema,
   EmailsRecoveryCodeSchema,
   EmailsToSentSchema,
   UserSchema,
@@ -14,12 +15,16 @@ import { DatabaseModule } from './conection/db.module';
 import { TestingController } from './features/testing  /testing.controller';
 import { TestingService } from './features/testing  /testing.service';
 import { TestingRepository } from './features/testing  /testing.repository';
+import { BlogsController } from './features/blogs/blogs.controller';
+import { BlogsService } from './features/blogs/blogs.service';
+import { BlogsRepository } from './features/blogs/blogs.repository';
 
 @Module({
   imports: [
     DatabaseModule,
     MongooseModule.forFeature([
       { name: 'users', schema: UserSchema, collection: 'Users' },
+      { name: 'blogs', schema: BlogsSchema, collection: 'Blogs' },
       {
         name: 'MyModelEmailsConfirmCode',
         schema: EmailsToSentSchema,
@@ -32,13 +37,20 @@ import { TestingRepository } from './features/testing  /testing.repository';
       },
     ]),
   ],
-  controllers: [AppController, UsersController, TestingController],
+  controllers: [
+    AppController,
+    UsersController,
+    BlogsController,
+    TestingController,
+  ],
   providers: [
     UsersService,
     EmailsRepository,
     UsersRepository,
     TestingService,
     TestingRepository,
+    BlogsService,
+    BlogsRepository,
   ],
 })
 export class AppModule {}
