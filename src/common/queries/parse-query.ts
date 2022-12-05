@@ -51,7 +51,7 @@ export class ParseQuery {
       sortBy = null;
     }
 
-    let sortDirection: SortOrder = -1;
+    let sortDirection: SortOrder = 'desc';
     if (
       [-1, 1, 'descending', 'desc', 'ascending', 'asc'].includes(
         querySortDirection,
