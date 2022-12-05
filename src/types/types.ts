@@ -31,7 +31,6 @@ export type EntityQueryType = {
   filterLogin?: string;
   filterEmail?: string;
 };
-export const sortDirectArr = [-1, 1, 'descending', 'desc', 'ascending', 'asc'];
 //...............................................User
 export type CreateUserInputModelType = {
   login: string;
