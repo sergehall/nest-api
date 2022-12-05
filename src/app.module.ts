@@ -4,6 +4,7 @@ import { UsersController } from './features/users/users.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import {
   BlogsSchema,
+  CommentsSchema,
   EmailsRecoveryCodeSchema,
   EmailsToSentSchema,
   LikeStatusPostsIdSchema,
@@ -24,6 +25,9 @@ import { PostsController } from './features/posts/posts.controller';
 import { PostsService } from './features/posts/posts.service';
 import { PostsRepository } from './features/posts/posts.repository';
 import { PreparationPosts } from './features/posts/preparationPosts/posts.preperation';
+import { CommentsController } from './features/comments/comments.controller';
+import { CommentsService } from './features/comments/comments.service';
+import { CommentsRepository } from './features/comments/comments.repository';
 
 @Module({
   imports: [
@@ -32,6 +36,7 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
       { name: 'users', schema: UserSchema, collection: 'Users' },
       { name: 'blogs', schema: BlogsSchema, collection: 'Blogs' },
       { name: 'posts', schema: PostsSchema, collection: 'Posts' },
+      { name: 'comments', schema: CommentsSchema, collection: 'Comments' },
       {
         name: 'MyModelEmailsConfirmCode',
         schema: EmailsToSentSchema,
@@ -54,6 +59,7 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
     BlogsController,
     PostsController,
     UsersController,
+    CommentsController,
     TestingController,
   ],
   providers: [
@@ -67,6 +73,8 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
     PostsService,
     PostsRepository,
     PreparationPosts,
+    CommentsService,
+    CommentsRepository,
   ],
 })
 export class AppModule {}

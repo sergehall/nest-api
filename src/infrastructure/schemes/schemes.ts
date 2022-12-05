@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 import {
   BlogsEntityType,
+  CommentsEntityType,
+  CommentType,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
+  LikeInfoType,
   likeStatusPostsIdType,
+  PostsType,
   UserType,
 } from '../../types/types';
 
@@ -114,7 +118,7 @@ export const EmailsRecoveryCodeSchema =
     },
   });
 
-export const PostsSchema = new mongoose.Schema({
+export const PostsSchema = new mongoose.Schema<PostsType>({
   id: {
     type: String,
     required: [true, 'Id is required!!!'],
@@ -200,3 +204,53 @@ export const LikeStatusPostsIdSchema =
       required: [true, 'addedAt is required'],
     },
   });
+
+const LikeInfoSchema = new mongoose.Schema<LikeInfoType>({
+  likesCount: {
+    type: Number,
+    required: [true, 'likesInfo is required'],
+  },
+  dislikesCount: {
+    type: Number,
+    required: [true, 'dislikesCount is required'],
+  },
+  myStatus: {
+    type: String,
+    required: [true, 'myStatus is required'],
+  },
+});
+const CommentSchema = new mongoose.Schema<CommentType>({
+  id: {
+    type: String,
+    required: [true, 'id is required'],
+  },
+  content: {
+    type: String,
+    required: [true, 'content is required'],
+  },
+  userId: {
+    type: String,
+    required: [true, 'userId is required'],
+  },
+  userLogin: {
+    type: String,
+    required: [true, 'userLogin is required'],
+  },
+  createdAt: {
+    type: String,
+    required: [true, 'createdAt is required'],
+  },
+  likesInfo: LikeInfoSchema,
+});
+
+export const CommentsSchema = new mongoose.Schema<CommentsEntityType>({
+  postId: {
+    type: String,
+    required: [true, 'postId is required'],
+  },
+  allComments: {
+    type: [CommentSchema],
+    default: [],
+    validate: (v: any) => Array.isArray(v),
+  },
+});

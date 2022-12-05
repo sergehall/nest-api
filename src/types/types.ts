@@ -189,6 +189,10 @@ export type CommentType = {
     myStatus: string;
   };
 };
+export type CommentsEntityType = {
+  postId: string;
+  allComments: CommentType[];
+};
 export type CommentsTypeModel = {
   postId: string;
   allComments: CommentType[];
@@ -197,6 +201,9 @@ export type ReturnObjCommentType = {
   data: CommentType | null;
   errorsMessages: ErrorType[];
   resultCode: number;
+};
+export type ContentInputModelType = {
+  content: string;
 };
 //...............................................Emails
 export type EmailConfirmCodeType = {
@@ -274,6 +281,11 @@ export type DTOLikeStatusPost = {
   likeStatus: string;
   addedAt: string;
 };
+export type LikeInfoType = {
+  likesCount: number;
+  dislikesCount: number;
+  myStatus: string;
+};
 //...............................................Session
 export type SessionTypeArray = {
   ip: string | null;
@@ -313,7 +325,7 @@ export type Query = {
   searchTitle: string;
   code: string;
   confirmationCode: string;
-  sortBy: -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+  sortBy: SortOrder;
   sortDirection: string;
   searchLoginTerm: string;
   searchEmailTerm: string;
