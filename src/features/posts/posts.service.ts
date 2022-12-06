@@ -65,6 +65,10 @@ export class PostsService {
     };
   }
 
+  async findPostById(id: string): Promise<PostsType | null> {
+    return await this.postsRepository.findPostById(id);
+  }
+
   async createPost(dtoPost: DTOPost): Promise<PostsType> {
     const newPost: PostsType = {
       id: uuid4().toString(),

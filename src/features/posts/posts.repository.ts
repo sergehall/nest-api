@@ -26,6 +26,19 @@ export class PostsRepository {
       .lean();
   }
 
+  async findPostById(id: string): Promise<PostsType | null> {
+    return await this.postsModel
+      .findOne(
+        { id: id },
+        {
+          _id: false,
+          __v: false,
+          'extendedLikesInfo.newestLikes_id': false,
+        },
+      )
+      .lean();
+  }
+
   async createPost(newPost: PostsType): Promise<PostsType> {
     return await this.postsModel.create(newPost);
   }

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import {
   ContentInputModelType,
   CreatePostInputModelType,
@@ -44,6 +52,12 @@ export class PostsController {
       sortDirection: paginationData.sortDirection,
     };
     return await this.postsService.findPosts(dtoPagination, [{}], currentUser);
+  }
+  @Get(':id')
+  async findPostById(@Param('id') id: string) {
+    const post = await this.postsService.findPostById(id);
+    if (!post) throw new HttpException('Not found', 404);
+    return post;
   }
 
   @Post()
