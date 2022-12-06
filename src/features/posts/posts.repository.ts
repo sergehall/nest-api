@@ -8,7 +8,6 @@ export class PostsRepository {
   constructor(
     @InjectModel('posts') private postsModel: mongoose.Model<PostsType>,
   ) {}
-
   async findPosts(
     entityFindPosts: EntityQueryType,
     [...filters],

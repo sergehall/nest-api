@@ -25,30 +25,16 @@ export class CommentsRepository {
     postId: string,
     newComment: CommentType,
   ): Promise<boolean> {
-    // console.log(postId, newComment, 'newComment --------------------');
-    // const result = this.commentsModel.findOneAndUpdate(
-    //   { postId: postId },
-    //   {
-    //     $push: { allComments: newComment },
-    //   },
-    //   { upsert: true, returnNewDocument: true },
-    // );
     const findPost = await this.commentsModel.findOne({ postId: postId });
     if (!findPost) {
       const create = await this.commentsModel.create({
         postId: postId,
         allComments: [newComment],
       });
-    } else {
-      this.commentsModel.findOneAndUpdate(
-        { postId: postId },
-        {
-          $push: { allComments: newComment },
-        },
-      );
+      return create.postId !== null;
     }
-    const findPost2 = await this.commentsModel.findOne({ postId: postId });
-    console.log(findPost2, 'findPost2 ++++++++++++++++++++++++');
-    return findPost2 !== null;
+    findPost.allComments.push(newComment);
+    await findPost.save();
+    return true;
   }
 }
