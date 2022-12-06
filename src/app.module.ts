@@ -7,10 +7,6 @@ import { UsersRepository } from './features/users/users.repository';
 import { TestingController } from './features/testing  /testing.controller';
 import { TestingService } from './features/testing  /testing.service';
 import { TestingRepository } from './features/testing  /testing.repository';
-import { BlogsController } from './features/blogs/blogs.controller';
-import { BlogsService } from './features/blogs/blogs.service';
-import { BlogsRepository } from './features/blogs/blogs.repository';
-import { PostsController } from './features/posts/posts.controller';
 import { PostsService } from './features/posts/posts.service';
 import { PostsRepository } from './features/posts/posts.repository';
 import { PreparationPosts } from './features/posts/preparationPosts/posts.preperation';
@@ -18,7 +14,12 @@ import { CommentsController } from './features/comments/comments.controller';
 import { CommentsService } from './features/comments/comments.service';
 import { CommentsRepository } from './features/comments/comments.repository';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BlogsController } from './features/bloggers/blogs.controller';
+import { PostsController } from './features/posts/posts.controller';
+import { BlogsService } from './features/bloggers/blogs.service';
+import { BlogsRepository } from './features/bloggers/blogs.repository';
 import { mongooseModels } from './infrastructure/schemes/modelsMongoose';
+import { PreparationComments } from './features/comments/preparationComments/comments.preperation';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { mongooseModels } from './infrastructure/schemes/modelsMongoose';
     PostsService,
     PostsRepository,
     PreparationPosts,
+    PreparationComments,
     CommentsService,
     CommentsRepository,
   ],

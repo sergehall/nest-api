@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
-  likeStatusPostsIdType,
+  LikeStatusPostsIdType,
   PostsType,
   UserType,
 } from '../../../types/types';
@@ -11,7 +11,7 @@ import mongoose from 'mongoose';
 export class PreparationPosts {
   constructor(
     @InjectModel('likeStatusPosts')
-    private likeStatusPosts: mongoose.Model<likeStatusPostsIdType>,
+    private likeStatusPosts: mongoose.Model<LikeStatusPostsIdType>,
   ) {}
   async preparationPostsForReturn(
     postArray: PostsType[],

@@ -16,11 +16,26 @@ export class CommentsRepository {
         {
           _id: false,
           'allComments._id': false,
+          'allComments.likesInfo._id': false,
         },
       )
       .then((c) => c?.allComments.filter((i) => i.id === id)[0]);
     return result ? result : null;
   }
+
+  async findCommentByPostId(postId: string): Promise<CommentType[] | null> {
+    const result = await this.commentsModel.findOne(
+      { postId: postId },
+      {
+        _id: false,
+        'allComments._id': false,
+        'allComments.likesInfo._id': false,
+      },
+    );
+
+    return !result ? [] : result.allComments;
+  }
+
   async createCommentByPostId(
     postId: string,
     newComment: CommentType,

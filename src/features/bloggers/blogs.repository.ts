@@ -1,4 +1,4 @@
-import { BlogsEntityType, BlogsType, EntityQueryType } from '../../types/types';
+import { BlogsEntityType, EntityPaginationType } from '../../types/types';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
@@ -6,12 +6,16 @@ import mongoose from 'mongoose';
 @Injectable()
 export class BlogsRepository {
   constructor(
-    @InjectModel('blogs') private blogsModel: mongoose.Model<BlogsEntityType>,
+    @InjectModel('blogs')
+    private blogsModel: mongoose.Model<BlogsEntityType>,
   ) {}
-  async findBlogs(entityFindBlogs: EntityQueryType): Promise<BlogsType[]> {
+  async getBlogs(
+    entityFindBlogs: EntityPaginationType,
+    filters: object[],
+  ): Promise<BlogsEntityType[]> {
     return await this.blogsModel
       .find(
-        {},
+        { $and: filters },
         {
           _id: false,
           __v: false,
@@ -23,7 +27,7 @@ export class BlogsRepository {
       .lean();
   }
 
-  async findBlogById(id: string): Promise<BlogsType | null> {
+  async findBlogById(id: string): Promise<BlogsEntityType | null> {
     return await this.blogsModel
       .findOne(
         { id: id },
@@ -35,7 +39,10 @@ export class BlogsRepository {
       .lean();
   }
 
-  async updatedBlogById(id: string, newBlog: BlogsType): Promise<boolean> {
+  async updatedBlogById(
+    id: string,
+    newBlog: BlogsEntityType,
+  ): Promise<boolean> {
     return await this.blogsModel
       .findOneAndUpdate(
         { id: id },
@@ -43,6 +50,7 @@ export class BlogsRepository {
           $set: {
             id: newBlog.id,
             name: newBlog.name,
+            description: newBlog.description,
             websiteUrl: newBlog.websiteUrl,
             createdAt: newBlog.createdAt,
           },

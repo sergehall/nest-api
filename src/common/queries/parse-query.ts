@@ -7,8 +7,8 @@ export class ParseQuery {
     let pageNumber = parseInt(<string>query.pageNumber);
     let pageSize = parseInt(<string>query.pageSize);
     let searchNameTerm = query.searchNameTerm?.toString();
-    let searchLoginTerm = query.searchLoginTerm?.toString();
-    let searchEmailTerm = query.searchEmailTerm?.toString();
+    let searchLoginTerm: string = query.searchLoginTerm?.toString();
+    let searchEmailTerm: string = query.searchEmailTerm?.toString();
     let title = query.sitle?.toString();
     let userName = query.searchName?.toString();
     let searchTitle = query.searchTitle?.toString();
@@ -17,14 +17,14 @@ export class ParseQuery {
     let sortBy = query.sortBy?.toString();
     const querySortDirection: SortOrder = query?.sortDirection;
 
-    if (!searchNameTerm || searchNameTerm.length === 0) {
-      searchNameTerm = null;
+    if (!searchNameTerm) {
+      searchNameTerm = '';
     }
     if (!searchLoginTerm || searchLoginTerm.length === 0) {
-      searchLoginTerm = null;
+      searchLoginTerm = '';
     }
-    if (!searchEmailTerm || searchEmailTerm.length === 0) {
-      searchEmailTerm = null;
+    if (!searchEmailTerm) {
+      searchEmailTerm = '';
     }
     if (!confirmationCode || confirmationCode.length === 0) {
       confirmationCode = null;

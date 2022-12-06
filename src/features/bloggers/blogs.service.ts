@@ -1,35 +1,44 @@
 import { BlogsRepository } from './blogs.repository';
 import {
-  BlogsDTOType,
+  BlogInputModelType,
   BlogsEntityType,
-  BlogsType,
-  EntityQueryType,
+  EntityPaginationType,
   Pagination,
-  QueryDTOType,
+  QueryPaginationType,
 } from '../../types/types';
 import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
+
 @Injectable()
 export class BlogsService {
   constructor(protected blogsRepository: BlogsRepository) {}
 
-  async findBlogs(dtoQuery: QueryDTOType): Promise<Pagination> {
-    const pageNumber = dtoQuery.pageNumber;
-    const startIndex = (dtoQuery.pageNumber - 1) * dtoQuery.pageSize;
-    const pageSize = dtoQuery.pageSize;
+  async getBlogs(
+    dtoPagination: QueryPaginationType,
+    searchNameTerm: string,
+  ): Promise<Pagination> {
+    const filter = { name: { $regex: searchNameTerm } };
+    const pageNumber = dtoPagination.pageNumber;
+    const startIndex = (dtoPagination.pageNumber - 1) * dtoPagination.pageSize;
+    const pageSize = dtoPagination.pageSize;
     let field = 'createdAt';
-    if (dtoQuery.sortBy === 'name' || dtoQuery.sortBy === 'websiteUrl') {
-      field = dtoQuery.sortBy;
+    if (
+      dtoPagination.sortBy === 'name' ||
+      dtoPagination.sortBy === 'websiteUrl'
+    ) {
+      field = dtoPagination.sortBy;
     }
-    const direction = dtoQuery.sortDirection;
-    const entityFindBlogs: EntityQueryType = {
+    const direction = dtoPagination.sortDirection;
+    const entityPagination: EntityPaginationType = {
       startIndex,
       pageSize,
       field,
       direction,
     };
-    const blogs = await this.blogsRepository.findBlogs(entityFindBlogs);
-    const totalCount = await this.blogsRepository.countDocuments([{}]);
+    const blogs = await this.blogsRepository.getBlogs(entityPagination, [
+      filter,
+    ]);
+    const totalCount = await this.blogsRepository.countDocuments([filter]);
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount: pagesCount,
@@ -40,11 +49,11 @@ export class BlogsService {
     };
   }
 
-  async findBlogById(id: string): Promise<BlogsType | null> {
+  async findBlogById(id: string): Promise<BlogsEntityType | null> {
     return await this.blogsRepository.findBlogById(id);
   }
 
-  async createBlogs(blogDTO: BlogsDTOType): Promise<boolean> {
+  async createBlogs(blogDTO: BlogInputModelType): Promise<boolean> {
     const id = uuid4().toString();
     const createdAt = new Date().toISOString();
     const newBlog: BlogsEntityType = {
@@ -58,11 +67,12 @@ export class BlogsService {
   }
   async updateBlogById(
     id: string,
-    updateBlogDTO: BlogsDTOType,
+    updateBlogDTO: BlogInputModelType,
   ): Promise<boolean> {
-    const newBlog: BlogsType = {
+    const newBlog: BlogsEntityType = {
       id: id,
       name: updateBlogDTO.name,
+      description: updateBlogDTO.description,
       websiteUrl: updateBlogDTO.websiteUrl,
       createdAt: new Date().toISOString(),
     };

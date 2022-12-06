@@ -15,7 +15,7 @@ import { UsersService } from './users.service';
 import {
   CreateUserInputModelType,
   DTONewUser,
-  QueryDTOType,
+  QueryPaginationType,
 } from '../../types/types';
 import { Request } from 'express';
 
@@ -25,22 +25,21 @@ export class UsersController {
 
   @Get()
   async getUsers(@Query() query) {
-    const allQuery = ParseQuery.getPaginationData(query);
-    const pageNumber = allQuery.pageNumber;
-    const pageSize = allQuery.pageSize;
-    const searchLoginTerm = allQuery.searchLoginTerm;
-    const searchEmailTerm = allQuery.searchEmailTerm;
-    const sortBy = allQuery.sortBy;
-    const sortDirection = allQuery.sortDirection;
-    const dtoQuery: QueryDTOType = {
-      pageNumber,
-      pageSize,
-      sortBy,
-      sortDirection,
+    const paginationData = ParseQuery.getPaginationData(query);
+    const dtoPagination: QueryPaginationType = {
+      pageNumber: paginationData.pageNumber,
+      pageSize: paginationData.pageSize,
+      sortBy: paginationData.sortBy,
+      sortDirection: paginationData.sortDirection,
+    };
+    const searchLoginTerm = paginationData.searchLoginTerm;
+    const searchEmailTerm = paginationData.searchEmailTerm;
+
+    const users = await this.usersService.findUsers(
+      dtoPagination,
       searchLoginTerm,
       searchEmailTerm,
-    };
-    const users = await this.usersService.findUsers(dtoQuery);
+    );
     if (!users) throw new HttpException('Not found', 404);
     return users;
   }

@@ -6,7 +6,8 @@ import {
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   LikeInfoType,
-  likeStatusPostsIdType,
+  LikeStatusCommentIdType,
+  LikeStatusPostsIdType,
   PostsType,
   UserType,
 } from '../../types/types';
@@ -181,7 +182,7 @@ export const PostsSchema = new mongoose.Schema<PostsType>({
 });
 
 export const LikeStatusPostsIdSchema =
-  new mongoose.Schema<likeStatusPostsIdType>({
+  new mongoose.Schema<LikeStatusPostsIdType>({
     postId: {
       type: String,
       required: [true, 'postId is required'],
@@ -254,3 +255,23 @@ export const CommentsSchema = new mongoose.Schema<CommentsEntityType>({
     validate: (v: any) => Array.isArray(v),
   },
 });
+
+export const LikeStatusCommentSchema =
+  new mongoose.Schema<LikeStatusCommentIdType>({
+    commentId: {
+      type: String,
+      required: [true, 'commentId is required'],
+    },
+    userId: {
+      type: String,
+      required: [true, 'userId is required'],
+    },
+    likeStatus: {
+      type: String,
+      required: [true, 'likeStatus is required'],
+    },
+    createdAt: {
+      type: String,
+      required: [true, 'createdAt is required'],
+    },
+  });

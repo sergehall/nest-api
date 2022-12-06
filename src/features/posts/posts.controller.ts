@@ -3,7 +3,7 @@ import {
   ContentInputModelType,
   CreatePostInputModelType,
   DTOPost,
-  QueryDTOType,
+  QueryPaginationType,
   UserType,
 } from '../../types/types';
 import { PostsService } from './posts.service';
@@ -16,31 +16,46 @@ export class PostsController {
     protected commentsService: CommentsService,
   ) {}
 
-  @Get()
-  async findAllPosts(@Query() query) {
+  @Get(':postId/comments')
+  async getCommentsByPostId(@Query() query, @Param('postId') postId: string) {
     const currentUser: UserType | null = null;
-    const allQuery = ParseQuery.getPaginationData(query);
-    const pageNumber = allQuery.pageNumber;
-    const pageSize = allQuery.pageSize;
-    const sortBy = allQuery.sortBy;
-    const sortDirection = allQuery.sortDirection;
-    const dtoQuery: QueryDTOType = {
-      pageNumber,
-      pageSize,
-      sortBy,
-      sortDirection,
+    const paginationData = ParseQuery.getPaginationData(query);
+    const dtoPagination: QueryPaginationType = {
+      pageNumber: paginationData.pageNumber,
+      pageSize: paginationData.pageSize,
+      sortBy: paginationData.sortBy,
+      sortDirection: paginationData.sortDirection,
     };
-    return await this.postsService.findPosts(dtoQuery, currentUser);
+    return await this.commentsService.findCommentsByPostId(
+      dtoPagination,
+      postId,
+      currentUser,
+    );
+  }
+
+  @Get()
+  async getAllPosts(@Query() query) {
+    const currentUser: UserType | null = null;
+    const paginationData = ParseQuery.getPaginationData(query);
+    const dtoPagination: QueryPaginationType = {
+      pageNumber: paginationData.pageNumber,
+      pageSize: paginationData.pageSize,
+      sortBy: paginationData.sortBy,
+      sortDirection: paginationData.sortDirection,
+    };
+    return await this.postsService.findPosts(dtoPagination, [{}], currentUser);
   }
 
   @Post()
   async createPost(@Body() inputModel: CreatePostInputModelType) {
-    //if not find blogger return 404
+    //if not find blogger return 404. take Name in  @UseGuards()
+    const blogName = 'Volt';
     const dtoPost: DTOPost = {
       title: inputModel.title,
       shortDescription: inputModel.shortDescription,
       content: inputModel.content,
       blogId: inputModel.blogId,
+      blogName: blogName,
     };
     return await this.postsService.createPost(dtoPost);
   }

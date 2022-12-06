@@ -12,24 +12,19 @@ export type Pagination = {
   page: number;
   pageSize: number;
   totalCount: number;
-  items: PostsType[] | CommentType[] | BlogsType[] | UserType[];
+  items: PostsType[] | CommentType[] | BlogsEntityType[] | UserType[];
 };
-export type QueryDTOType = {
+export type QueryPaginationType = {
   pageNumber: number;
   pageSize: number;
   sortBy: string;
   sortDirection: SortOrder;
-  searchLoginTerm?: string;
-  searchEmailTerm?: string;
-  searchNameTerm?: string;
 };
-export type EntityQueryType = {
+export type EntityPaginationType = {
   startIndex: number;
   pageSize: number;
   field: string;
   direction: SortOrder;
-  filterLogin?: string;
-  filterEmail?: string;
 };
 //...............................................User
 export type CreateUserInputModelType = {
@@ -91,29 +86,7 @@ export type DTONewUser = {
   clientIp: string;
 };
 //...............................................Blogs
-export type BlogsType = {
-  id: string;
-  name: string;
-  websiteUrl: string;
-  createdAt: string;
-};
-export type ReturnObjBlogType = {
-  data: BlogsType | null;
-  errorsMessages: ErrorType[];
-  resultCode: number;
-};
-export type DTOBlogsType = {
-  pageSize: number;
-  startIndex: number;
-  field: string;
-  direction: SortOrder;
-};
-export type CreateBlogInputModelType = {
-  name: string;
-  description: string;
-  websiteUrl: string;
-};
-export type BlogsDTOType = {
+export type BlogInputModelType = {
   name: string;
   description: string;
   websiteUrl: string;
@@ -124,6 +97,17 @@ export type BlogsEntityType = {
   description: string;
   websiteUrl: string;
   createdAt: string;
+};
+export type ReturnObjBlogType = {
+  data: BlogsEntityType | null;
+  errorsMessages: ErrorType[];
+  resultCode: number;
+};
+export type DTOBlogsType = {
+  pageSize: number;
+  startIndex: number;
+  field: string;
+  direction: SortOrder;
 };
 //...............................................Posts
 export type PostsType = {
@@ -169,11 +153,17 @@ export type CreatePostInputModelType = {
   content: string;
   blogId: string;
 };
+export type CreatePostBlogInputModelType = {
+  title: string;
+  shortDescription: string;
+  content: string;
+};
 export type DTOPost = {
   title: string;
   shortDescription: string;
   content: string;
   blogId: string;
+  blogName: string;
 };
 //...............................................Comments
 export type CommentType = {
@@ -254,13 +244,13 @@ export type BlackListIPDBType = {
   addedAt: string;
 };
 //...............................................likeStatus
-export type likeStatusCommentIdType = {
+export type LikeStatusCommentIdType = {
   commentId: string;
   userId: string;
   likeStatus: string;
   createdAt: string;
 };
-export type likeStatusPostsIdType = {
+export type LikeStatusPostsIdType = {
   postId: string;
   userId: string;
   login: string;

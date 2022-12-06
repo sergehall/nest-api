@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import {
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
-  EntityQueryType,
+  EntityPaginationType,
   UserType,
 } from '../../types/types';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,14 +14,19 @@ export class UsersRepository {
     @InjectModel('users') private usersModel: mongoose.Model<UserType>,
   ) {}
 
-  async findUsers(entityFindUsers: EntityQueryType): Promise<UserType[]> {
+  async findUsers(
+    entityFindUsers: EntityPaginationType,
+    searchLoginTerm: string,
+    searchEmailTerm: string,
+  ): Promise<UserType[]> {
+    const filters = [
+      { 'accountData.login': { $regex: searchLoginTerm } },
+      { 'accountData.email': { $regex: searchEmailTerm } },
+    ];
     return await this.usersModel
       .find(
         {
-          $and: [
-            { 'accountData.login': { $regex: entityFindUsers.filterLogin } },
-            { 'accountData.email': { $regex: entityFindUsers.filterEmail } },
-          ],
+          $and: filters,
         },
         {
           _id: false,
@@ -58,7 +63,11 @@ export class UsersRepository {
     );
   }
 
-  async countDocuments([...filters]) {
+  async countDocuments(searchLoginTerm: string, searchEmailTerm: string) {
+    const filters = [
+      { 'accountData.login': { $regex: searchLoginTerm } },
+      { 'accountData.email': { $regex: searchEmailTerm } },
+    ];
     return await this.usersModel.countDocuments({ $and: filters });
   }
 

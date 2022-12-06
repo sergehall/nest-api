@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { EntityQueryType, PostsType } from '../../types/types';
+import { EntityPaginationType, PostsType } from '../../types/types';
 
 @Injectable()
 export class PostsRepository {
@@ -9,7 +9,7 @@ export class PostsRepository {
     @InjectModel('posts') private postsModel: mongoose.Model<PostsType>,
   ) {}
   async findPosts(
-    entityFindPosts: EntityQueryType,
+    entityFindPosts: EntityPaginationType,
     [...filters],
   ): Promise<PostsType[]> {
     return await this.postsModel

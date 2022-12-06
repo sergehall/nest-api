@@ -3,10 +3,10 @@ import * as uuid4 from 'uuid4';
 import { PostsRepository } from './posts.repository';
 import {
   DTOPost,
-  EntityQueryType,
+  EntityPaginationType,
   Pagination,
   PostsType,
-  QueryDTOType,
+  QueryPaginationType,
   UserType,
 } from '../../types/types';
 import { PreparationPosts } from './preparationPosts/posts.preperation';
@@ -18,30 +18,35 @@ export class PostsService {
     protected preparationPosts: PreparationPosts,
   ) {}
   async findPosts(
-    dtoQuery: QueryDTOType,
+    paginationData: QueryPaginationType,
+    filters: object[],
     currentUser: UserType | null,
   ): Promise<Pagination> {
-    const pageSize = dtoQuery.pageSize;
-    const direction = dtoQuery.sortDirection;
+    const pageSize = paginationData.pageSize;
+    const direction = paginationData.sortDirection;
     let field = 'createdAt';
     if (
-      dtoQuery.sortBy === 'title' ||
-      dtoQuery.sortBy === 'shortDescription' ||
-      dtoQuery.sortBy === 'blogId' ||
-      dtoQuery.sortBy === 'blogName' ||
-      dtoQuery.sortBy === 'content' ||
-      dtoQuery.sortBy === 'blogName'
+      paginationData.sortBy === 'title' ||
+      paginationData.sortBy === 'shortDescription' ||
+      paginationData.sortBy === 'blogId' ||
+      paginationData.sortBy === 'blogName' ||
+      paginationData.sortBy === 'content' ||
+      paginationData.sortBy === 'blogName'
     ) {
-      field = dtoQuery.sortBy;
+      field = paginationData.sortBy;
     }
-    const startIndex = (dtoQuery.pageNumber - 1) * dtoQuery.pageSize;
-    const entityFindPosts: EntityQueryType = {
+    const startIndex =
+      (paginationData.pageNumber - 1) * paginationData.pageSize;
+    const entityFindPosts: EntityPaginationType = {
       startIndex: startIndex,
       pageSize: pageSize,
       field: field,
       direction: direction,
     };
-    const posts = await this.postsRepository.findPosts(entityFindPosts, [{}]);
+    const posts = await this.postsRepository.findPosts(
+      entityFindPosts,
+      filters,
+    );
     let filledPost = [];
     if (currentUser) {
       filledPost = await this.preparationPosts.preparationPostsForReturn(
@@ -49,16 +54,17 @@ export class PostsService {
         currentUser,
       );
     }
-    const totalCount = await this.postsRepository.countDocuments([{}]);
+    const totalCount = await this.postsRepository.countDocuments(filters);
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount: pagesCount,
-      page: dtoQuery.pageNumber,
+      page: paginationData.pageNumber,
       pageSize: pageSize,
       totalCount: totalCount,
       items: filledPost.length === 0 ? posts : filledPost,
     };
   }
+
   async createPost(dtoPost: DTOPost): Promise<PostsType> {
     const newPost: PostsType = {
       id: uuid4().toString(),
@@ -66,7 +72,7 @@ export class PostsService {
       shortDescription: dtoPost.shortDescription,
       content: dtoPost.content,
       blogId: dtoPost.blogId,
-      blogName: dtoPost.blogId,
+      blogName: dtoPost.blogName,
       createdAt: new Date().toISOString(),
       extendedLikesInfo: {
         likesCount: 0,

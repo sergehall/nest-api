@@ -3,6 +3,7 @@ import {
   CommentsSchema,
   EmailsRecoveryCodeSchema,
   EmailsToSentSchema,
+  LikeStatusCommentSchema,
   LikeStatusPostsIdSchema,
   PostsSchema,
   UserSchema,
@@ -27,5 +28,10 @@ export const mongooseModels = [
     name: 'likeStatusPosts',
     schema: LikeStatusPostsIdSchema,
     collection: 'LikeStatusPosts',
+  },
+  {
+    name: 'likeStatusComment',
+    schema: LikeStatusCommentSchema,
+    collection: 'LikeStatusComment',
   },
 ];
