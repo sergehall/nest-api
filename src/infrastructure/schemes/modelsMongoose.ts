@@ -9,7 +9,7 @@ import {
   UserSchema,
 } from './schemes';
 
-export const mongooseModels = [
+export const modelsMongoose = [
   { name: 'users', schema: UserSchema, collection: 'Users' },
   { name: 'blogs', schema: BlogsSchema, collection: 'Blogs' },
   { name: 'posts', schema: PostsSchema, collection: 'Posts' },

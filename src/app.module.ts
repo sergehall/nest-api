@@ -1,5 +1,8 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './features/users/users.controller';
 import { UsersService } from './features/users/users.service';
 import { EmailsRepository } from './features/emails/emails.repository';
@@ -13,20 +16,19 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
 import { CommentsController } from './features/comments/comments.controller';
 import { CommentsService } from './features/comments/comments.service';
 import { CommentsRepository } from './features/comments/comments.repository';
-import { MongooseModule } from '@nestjs/mongoose';
 import { BlogsController } from './features/bloggers/blogs.controller';
 import { PostsController } from './features/posts/posts.controller';
 import { BlogsService } from './features/bloggers/blogs.service';
 import { BlogsRepository } from './features/bloggers/blogs.repository';
-import { mongooseModels } from './infrastructure/schemes/modelsMongoose';
 import { PreparationComments } from './features/comments/preparationComments/comments.preperation';
+import { modelsMongoose } from './infrastructure/schemes/modelsMongoose';
 
 @Module({
   imports: [
     MongooseModule.forRoot(
       process.env.ATLAS_URI + '/' + process.env.NEST_DATABASE,
     ),
-    MongooseModule.forFeature(mongooseModels),
+    MongooseModule.forFeature(modelsMongoose),
   ],
   controllers: [
     AppController,

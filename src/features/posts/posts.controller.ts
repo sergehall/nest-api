@@ -17,6 +17,7 @@ import {
 import { PostsService } from './posts.service';
 import { ParseQuery } from '../../common/queries/parse-query';
 import { CommentsService } from '../comments/comments.service';
+
 @Controller('posts')
 export class PostsController {
   constructor(
