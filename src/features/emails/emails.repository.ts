@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { EmailConfirmCodeType, EmailRecoveryCodeType } from '../../types/types';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { EmailConfirmCodeType, EmailRecoveryCodeType } from '../../types/types';
 
 @Injectable()
 export class EmailsRepository {

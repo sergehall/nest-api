@@ -1,20 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { UsersController } from './features/users/users.controller';
-import { MongooseModule } from '@nestjs/mongoose';
-import {
-  BlogsSchema,
-  CommentsSchema,
-  EmailsRecoveryCodeSchema,
-  EmailsToSentSchema,
-  LikeStatusPostsIdSchema,
-  PostsSchema,
-  UserSchema,
-} from './infrastructure/schemes/schemes';
 import { UsersService } from './features/users/users.service';
 import { EmailsRepository } from './features/emails/emails.repository';
 import { UsersRepository } from './features/users/users.repository';
-import { DatabaseModule } from './infrastructure/conection/db.module';
 import { TestingController } from './features/testing  /testing.controller';
 import { TestingService } from './features/testing  /testing.service';
 import { TestingRepository } from './features/testing  /testing.repository';
@@ -28,31 +17,15 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
 import { CommentsController } from './features/comments/comments.controller';
 import { CommentsService } from './features/comments/comments.service';
 import { CommentsRepository } from './features/comments/comments.repository';
+import { MongooseModule } from '@nestjs/mongoose';
+import { mongooseModels } from './infrastructure/schemes/modelsMongoose';
 
 @Module({
   imports: [
-    DatabaseModule,
-    MongooseModule.forFeature([
-      { name: 'users', schema: UserSchema, collection: 'Users' },
-      { name: 'blogs', schema: BlogsSchema, collection: 'Blogs' },
-      { name: 'posts', schema: PostsSchema, collection: 'Posts' },
-      { name: 'comments', schema: CommentsSchema, collection: 'Comments' },
-      {
-        name: 'MyModelEmailsConfirmCode',
-        schema: EmailsToSentSchema,
-        collection: 'EmailsConfirmationCode',
-      },
-      {
-        name: 'MyModelEmailsRecoveryCode',
-        schema: EmailsRecoveryCodeSchema,
-        collection: 'EmailsRecoveryCode',
-      },
-      {
-        name: 'likeStatusPosts',
-        schema: LikeStatusPostsIdSchema,
-        collection: 'LikeStatusPosts',
-      },
-    ]),
+    MongooseModule.forRoot(
+      process.env.ATLAS_URI + '/' + process.env.NEST_DATABASE,
+    ),
+    MongooseModule.forFeature(mongooseModels),
   ],
   controllers: [
     AppController,
