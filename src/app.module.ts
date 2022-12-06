@@ -22,9 +22,11 @@ import { BlogsService } from './features/bloggers/blogs.service';
 import { BlogsRepository } from './features/bloggers/blogs.repository';
 import { PreparationComments } from './features/comments/preparationComments/comments.preperation';
 import { modelsMongoose } from './infrastructure/schemes/modelsMongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRoot(
       process.env.ATLAS_URI + '/' + process.env.NEST_DATABASE,
     ),
