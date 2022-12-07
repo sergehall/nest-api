@@ -2,7 +2,7 @@
 /dist
 /node_modules
 
-# dotenv environment variables file
+# .env environment variables file
 .env
 .env.test
 

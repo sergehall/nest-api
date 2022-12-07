@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './features/users/users.controller';
@@ -14,13 +19,14 @@ import { PreparationPosts } from './features/posts/preparationPosts/posts.preper
 import { CommentsController } from './features/comments/comments.controller';
 import { CommentsService } from './features/comments/comments.service';
 import { CommentsRepository } from './features/comments/comments.repository';
-import { BlogsController } from './features/bloggers/blogs.controller';
+import { BlogsController } from './features/blogs/blogs.controller';
 import { PostsController } from './features/posts/posts.controller';
-import { BlogsService } from './features/bloggers/blogs.service';
-import { BlogsRepository } from './features/bloggers/blogs.repository';
+import { BlogsService } from './features/blogs/blogs.service';
+import { BlogsRepository } from './features/blogs/blogs.repository';
 import { PreparationComments } from './features/comments/preparationComments/comments.preperation';
 import { modelsMongoose } from './infrastructure/schemes/modelsMongoose';
 import { ConfigModule } from '@nestjs/config';
+import { LoggerMiddleware } from './logger/middleware';
 
 @Module({
   imports: [
@@ -32,10 +38,10 @@ import { ConfigModule } from '@nestjs/config';
   ],
   controllers: [
     AppController,
-    BlogsController,
     PostsController,
     UsersController,
     CommentsController,
+    BlogsController,
     TestingController,
   ],
   providers: [
@@ -43,9 +49,9 @@ import { ConfigModule } from '@nestjs/config';
     EmailsRepository,
     UsersRepository,
     TestingService,
-    TestingRepository,
     BlogsService,
     BlogsRepository,
+    TestingRepository,
     PostsService,
     PostsRepository,
     PreparationPosts,
@@ -54,4 +60,11 @@ import { ConfigModule } from '@nestjs/config';
     CommentsRepository,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .exclude({ path: 'blogs', method: RequestMethod.GET }, 'blogs/(.*)')
+      .forRoutes(BlogsController);
+  }
+}
