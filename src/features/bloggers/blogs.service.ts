@@ -24,7 +24,8 @@ export class BlogsService {
     let field = 'createdAt';
     if (
       dtoPagination.sortBy === 'name' ||
-      dtoPagination.sortBy === 'websiteUrl'
+      dtoPagination.sortBy === 'websiteUrl' ||
+      dtoPagination.sortBy === 'description'
     ) {
       field = dtoPagination.sortBy;
     }
