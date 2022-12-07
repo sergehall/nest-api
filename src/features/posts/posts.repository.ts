@@ -38,6 +38,25 @@ export class PostsRepository {
       )
       .lean();
   }
+  async updatePostById(newPost: PostsType): Promise<boolean> {
+    const updatePost = await this.postsModel
+      .findOneAndUpdate(
+        { id: newPost.id },
+        {
+          $set: newPost,
+        },
+        { returnDocument: 'after' },
+      )
+      .lean();
+    return updatePost !== null;
+  }
+
+  async deletePostById(id: string): Promise<boolean> {
+    const result = await this.postsModel.deleteOne({ id: id });
+    // deleted all comments
+    await this.postsModel.deleteOne({ postId: id });
+    return result.deletedCount === 1;
+  }
 
   async createPost(newPost: PostsType): Promise<PostsType> {
     return await this.postsModel.create(newPost);

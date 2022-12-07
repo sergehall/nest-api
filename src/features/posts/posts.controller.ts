@@ -1,16 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import {
   ContentInputModelType,
-  CreatePostInputModelType,
   DTOPost,
+  PostInputModelType,
   QueryPaginationType,
   UserType,
 } from '../../types/types';
@@ -62,7 +64,7 @@ export class PostsController {
   }
 
   @Post()
-  async createPost(@Body() inputModel: CreatePostInputModelType) {
+  async createPost(@Body() inputModel: PostInputModelType) {
     //if not find blogger return 404. take Name in  @UseGuards()
     const blogName = 'Volt';
     const dtoPost: DTOPost = {
@@ -102,5 +104,29 @@ export class PostsController {
       inputModel.content,
       user,
     );
+  }
+  @Put(':id')
+  async updateBlogById(
+    @Param('id') id: string,
+    @Body() inputModel: PostInputModelType,
+  ) {
+    const updatePostDTO: PostInputModelType = {
+      title: inputModel.title,
+      shortDescription: inputModel.shortDescription,
+      content: inputModel.content,
+      blogId: inputModel.blogId,
+    };
+    const updatePost = await this.postsService.updatePostById(
+      id,
+      updatePostDTO,
+    );
+    if (!updatePost) throw new HttpException('Not found', 404);
+    return updatePost;
+  }
+  @Delete(':id')
+  async deletePostById(@Param('id') id: string) {
+    const deletedPost = await this.postsService.deletePostById(id);
+    if (!deletedPost) throw new HttpException('Not found', 404);
+    return deletedPost;
   }
 }

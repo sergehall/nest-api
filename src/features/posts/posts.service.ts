@@ -5,6 +5,7 @@ import {
   DTOPost,
   EntityPaginationType,
   Pagination,
+  PostInputModelType,
   PostsType,
   QueryPaginationType,
   UserType,
@@ -91,5 +92,40 @@ export class PostsService {
       throw new HttpException('Not create post', 500);
     }
     return newPost;
+  }
+  async updatePostById(
+    id: string,
+    updatePostDTO: PostInputModelType,
+  ): Promise<boolean> {
+    const findBlog = 'Niko';
+    // const findBlog = await this.blogsRepository.findBlogById(newBlogId);
+    // if (!findBlog) {
+    //   errorsArray.push(notFoundBlogId);
+    //   return {
+    //     data: null,
+    //     errorsMessages: errorsArray,
+    //     resultCode: 1,
+    //   };
+    // }
+    const newPost: PostsType = {
+      id: id,
+      title: updatePostDTO.title,
+      shortDescription: updatePostDTO.shortDescription,
+      content: updatePostDTO.content,
+      blogId: updatePostDTO.blogId,
+      blogName: findBlog,
+      createdAt: new Date().toISOString(),
+      extendedLikesInfo: {
+        likesCount: 0,
+        dislikesCount: 0,
+        myStatus: 'None',
+        newestLikes: [],
+      },
+    };
+    return await this.postsRepository.updatePostById(newPost);
+  }
+
+  async deletePostById(id: string): Promise<boolean> {
+    return await this.postsRepository.deletePostById(id);
   }
 }

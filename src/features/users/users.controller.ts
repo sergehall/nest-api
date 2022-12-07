@@ -44,11 +44,6 @@ export class UsersController {
     return users;
   }
 
-  @Get(':id')
-  async getUsersById(@Param('id') userId: string) {
-    return [{ id: 1 }, { id: 2 }].find((i) => i.id === +userId);
-  }
-
   @Post()
   async createUsers(
     @Body() inputModel: CreateUserInputModelType,

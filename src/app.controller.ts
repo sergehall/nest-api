@@ -2,8 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  @Get('/')
+  @Get()
   getHello(): string {
-    return 'Hello IT-Incubator!';
+    return 'Hello World!';
   }
 }

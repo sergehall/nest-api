@@ -147,7 +147,7 @@ export type DTOFindPostsByBlogId = {
   field: string;
   direction: SortOrder;
 };
-export type CreatePostInputModelType = {
+export type PostInputModelType = {
   title: string;
   shortDescription: string;
   content: string;
