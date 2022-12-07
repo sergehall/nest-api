@@ -1,5 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
 import * as bcrypt from 'bcrypt';
 import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
