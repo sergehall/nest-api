@@ -67,7 +67,6 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 - Author - Serge Hall
 - Website - [https://sergioartg.com](https://sergioartg.com/)
-- Instagram - [@sergioartg](https://www.instagram.com/sergioartg/)
 
 ## Respect
 
