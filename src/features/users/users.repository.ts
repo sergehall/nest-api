@@ -21,7 +21,7 @@ export class UsersRepository {
     entityFindUsers: EntityPaginationType,
     searchFilters: SearchFiltersType,
   ): Promise<UserType[]> {
-    const convertedForDBFilters = await this.creatFiltersForDB.prepForUser(
+    const convertedForDBFilters = await this.creatFiltersForDB.convertForUser(
       searchFilters,
     );
     return await this.usersModel
@@ -65,7 +65,7 @@ export class UsersRepository {
   }
 
   async countDocuments(searchFilters: SearchFiltersType) {
-    const convertedForDBFilters = await this.creatFiltersForDB.prepForUser(
+    const convertedForDBFilters = await this.creatFiltersForDB.convertForUser(
       searchFilters,
     );
     return await this.usersModel.countDocuments({

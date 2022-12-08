@@ -19,7 +19,7 @@ export class BlogsRepository {
     entityFindBlogs: EntityPaginationType,
     searchFilters: SearchFiltersType,
   ): Promise<BlogsEntityType[]> {
-    const convertedForDBFilters = await this.creatFiltersForDB.prep(
+    const convertedForDBFilters = await this.creatFiltersForDB.convertAll(
       searchFilters,
     );
     return await this.blogsModel
@@ -75,7 +75,9 @@ export class BlogsRepository {
   }
 
   async countDocuments([...filters]) {
-    const convertedForDBFilters = await this.creatFiltersForDB.prep(filters);
+    const convertedForDBFilters = await this.creatFiltersForDB.convertAll(
+      filters,
+    );
     return await this.blogsModel.countDocuments({
       $and: convertedForDBFilters,
     });

@@ -13,10 +13,10 @@ const searchUserFilters = {
 
 @Injectable()
 export class ConvertFiltersForDB {
-  async prep([...rawFilters]) {
+  async convertAll([...rawFilters]) {
     return this._convert([...rawFilters], searchFilters);
   }
-  async prepForUser([...rawFilters]) {
+  async convertForUser([...rawFilters]) {
     return this._convert([...rawFilters], searchUserFilters);
   }
 
