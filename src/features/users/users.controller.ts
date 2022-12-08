@@ -32,13 +32,16 @@ export class UsersController {
       sortBy: paginationData.sortBy,
       sortDirection: paginationData.sortDirection,
     };
-    const searchLoginTerm = paginationData.searchLoginTerm;
-    const searchEmailTerm = paginationData.searchEmailTerm;
+    const searchFilters = [
+      {
+        searchLoginTerm: paginationData.searchLoginTerm,
+        searchEmailTerm: paginationData.searchEmailTerm,
+      },
+    ];
 
     const users = await this.usersService.findUsers(
       dtoPagination,
-      searchLoginTerm,
-      searchEmailTerm,
+      searchFilters,
     );
     if (!users) throw new HttpException('Not found', 404);
     return users;

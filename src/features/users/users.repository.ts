@@ -4,29 +4,30 @@ import {
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   EntityPaginationType,
+  SearchFiltersType,
   UserType,
 } from '../../types/types';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConvertFiltersForDB } from '../../common/queries/convertFiltersForDB';
 
 @Injectable()
 export class UsersRepository {
   constructor(
+    protected creatFiltersForDB: ConvertFiltersForDB,
     @InjectModel('users') private usersModel: mongoose.Model<UserType>,
   ) {}
 
   async findUsers(
     entityFindUsers: EntityPaginationType,
-    searchLoginTerm: string,
-    searchEmailTerm: string,
+    searchFilters: SearchFiltersType,
   ): Promise<UserType[]> {
-    const filters = [
-      { 'accountData.login': { $regex: searchLoginTerm } },
-      { 'accountData.email': { $regex: searchEmailTerm } },
-    ];
+    const convertedForDBFilters = await this.creatFiltersForDB.prepForUser(
+      searchFilters,
+    );
     return await this.usersModel
       .find(
         {
-          $and: filters,
+          $and: convertedForDBFilters,
         },
         {
           _id: false,
@@ -63,12 +64,13 @@ export class UsersRepository {
     );
   }
 
-  async countDocuments(searchLoginTerm: string, searchEmailTerm: string) {
-    const filters = [
-      { 'accountData.login': { $regex: searchLoginTerm } },
-      { 'accountData.email': { $regex: searchEmailTerm } },
-    ];
-    return await this.usersModel.countDocuments({ $and: filters });
+  async countDocuments(searchFilters: SearchFiltersType) {
+    const convertedForDBFilters = await this.creatFiltersForDB.prepForUser(
+      searchFilters,
+    );
+    return await this.usersModel.countDocuments({
+      $and: convertedForDBFilters,
+    });
   }
 
   async findByLoginAndEmail(

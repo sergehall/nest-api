@@ -6,20 +6,22 @@ import {
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
-import { CreateFiltersForDB } from '../../common/queries/pretFiltersToDB';
+import { ConvertFiltersForDB } from '../../common/queries/convertFiltersForDB';
 
 @Injectable()
 export class BlogsRepository {
   constructor(
-    protected creatFiltersForDB: CreateFiltersForDB,
+    protected creatFiltersForDB: ConvertFiltersForDB,
     @InjectModel('blogs')
     private blogsModel: mongoose.Model<BlogsEntityType>,
   ) {}
   async getBlogs(
     entityFindBlogs: EntityPaginationType,
-    filters: SearchFiltersType,
+    searchFilters: SearchFiltersType,
   ): Promise<BlogsEntityType[]> {
-    const convertedForDBFilters = await this.creatFiltersForDB.prep(filters);
+    const convertedForDBFilters = await this.creatFiltersForDB.prep(
+      searchFilters,
+    );
     return await this.blogsModel
       .find(
         { $and: convertedForDBFilters },

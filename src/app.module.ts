@@ -27,7 +27,7 @@ import { PreparationComments } from './features/comments/preparationComments/com
 import { modelsMongoose } from './infrastructure/schemes/modelsMongoose';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerMiddleware } from './logger/middleware';
-import { CreateFiltersForDB } from './common/queries/pretFiltersToDB';
+import { ConvertFiltersForDB } from './common/queries/convertFiltersForDB';
 
 @Module({
   imports: [
@@ -59,7 +59,7 @@ import { CreateFiltersForDB } from './common/queries/pretFiltersToDB';
     PreparationComments,
     CommentsService,
     CommentsRepository,
-    CreateFiltersForDB,
+    ConvertFiltersForDB,
   ],
 })
 export class AppModule implements NestModule {

@@ -8,6 +8,7 @@ import {
   EntityPaginationType,
   Pagination,
   QueryPaginationType,
+  SearchFiltersType,
   UserType,
 } from '../../types/types';
 import { UsersRepository } from './users.repository';
@@ -22,8 +23,7 @@ export class UsersService {
 
   async findUsers(
     dtoPagination: QueryPaginationType,
-    searchLoginTerm: string,
-    searchEmailTerm: string,
+    searchFilters: SearchFiltersType,
   ): Promise<Pagination> {
     const startIndex = (dtoPagination.pageNumber - 1) * dtoPagination.pageSize;
     const pageSize = dtoPagination.pageSize;
@@ -42,13 +42,11 @@ export class UsersService {
 
     const users = await this.usersRepository.findUsers(
       entityFindUsers,
-      searchLoginTerm,
-      searchEmailTerm,
+      searchFilters,
     );
     // count documents by filterLogin and filterEmail
     const countDocuments = await this.usersRepository.countDocuments(
-      searchLoginTerm,
-      searchEmailTerm,
+      searchFilters,
     );
 
     const pagesCount = Math.ceil(countDocuments / pageSize);
