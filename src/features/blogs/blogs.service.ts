@@ -2,10 +2,10 @@ import { BlogsRepository } from './blogs.repository';
 import {
   BlogInputModelType,
   BlogsEntityType,
+  DtoQueryType,
   EntityPaginationType,
   Pagination,
   QueryPaginationType,
-  SearchFiltersType,
 } from '../../types/types';
 import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
@@ -16,7 +16,7 @@ export class BlogsService {
 
   async getBlogs(
     dtoPagination: QueryPaginationType,
-    searchFilters: SearchFiltersType,
+    searchFilters: DtoQueryType,
   ): Promise<Pagination> {
     const pageNumber = dtoPagination.pageNumber;
     const startIndex = (dtoPagination.pageNumber - 1) * dtoPagination.pageSize;

@@ -1,7 +1,7 @@
 import {
   BlogsEntityType,
+  DtoQueryType,
   EntityPaginationType,
-  SearchFiltersType,
 } from '../../types/types';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -17,7 +17,7 @@ export class BlogsRepository {
   ) {}
   async getBlogs(
     entityFindBlogs: EntityPaginationType,
-    searchFilters: SearchFiltersType,
+    searchFilters: DtoQueryType,
   ): Promise<BlogsEntityType[]> {
     const convertedForDBFilters = await this.creatFiltersForDB.convertAll(
       searchFilters,

@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import {
+  DtoQueryType,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   EntityPaginationType,
-  SearchFiltersType,
   UserType,
 } from '../../types/types';
 import { InjectModel } from '@nestjs/mongoose';
@@ -19,7 +19,7 @@ export class UsersRepository {
 
   async findUsers(
     entityFindUsers: EntityPaginationType,
-    searchFilters: SearchFiltersType,
+    searchFilters: DtoQueryType,
   ): Promise<UserType[]> {
     const convertedForDBFilters = await this.creatFiltersForDB.convertForUser(
       searchFilters,
@@ -64,7 +64,7 @@ export class UsersRepository {
     );
   }
 
-  async countDocuments(searchFilters: SearchFiltersType) {
+  async countDocuments(searchFilters: DtoQueryType) {
     const convertedForDBFilters = await this.creatFiltersForDB.convertForUser(
       searchFilters,
     );

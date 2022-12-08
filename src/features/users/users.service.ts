@@ -3,12 +3,12 @@ import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
 import {
   DTONewUser,
+  DtoQueryType,
   EmailConfirmCodeType,
   EmailRecoveryCodeType,
   EntityPaginationType,
   Pagination,
   QueryPaginationType,
-  SearchFiltersType,
   UserType,
 } from '../../types/types';
 import { UsersRepository } from './users.repository';
@@ -23,7 +23,7 @@ export class UsersService {
 
   async findUsers(
     dtoPagination: QueryPaginationType,
-    searchFilters: SearchFiltersType,
+    dtoQuery: DtoQueryType,
   ): Promise<Pagination> {
     const startIndex = (dtoPagination.pageNumber - 1) * dtoPagination.pageSize;
     const pageSize = dtoPagination.pageSize;
@@ -42,12 +42,10 @@ export class UsersService {
 
     const users = await this.usersRepository.findUsers(
       entityFindUsers,
-      searchFilters,
+      dtoQuery,
     );
     // count documents by filterLogin and filterEmail
-    const countDocuments = await this.usersRepository.countDocuments(
-      searchFilters,
-    );
+    const countDocuments = await this.usersRepository.countDocuments(dtoQuery);
 
     const pagesCount = Math.ceil(countDocuments / pageSize);
     return {

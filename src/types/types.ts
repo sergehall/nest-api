@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb';
 
 export type SortOrder = -1 | 1 | 'descending' | 'desc' | 'ascending' | 'asc';
-export type SearchFiltersType = {
+export type DtoQueryType = {
   searchNameTerm?: string;
   searchLoginTerm?: string;
   searchEmailTerm?: string;
