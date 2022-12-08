@@ -29,14 +29,14 @@ export class BlogsController {
   @Get()
   async getAllBlogs(@Query() query) {
     const paginationData = ParseQuery.getPaginationData(query);
-    const searchNameTerm = paginationData.searchNameTerm;
+    const searchFilters = { searchNameTerm: paginationData.searchNameTerm };
     const dtoPagination: QueryPaginationType = {
       pageNumber: paginationData.pageNumber,
       pageSize: paginationData.pageSize,
       sortBy: paginationData.sortBy,
       sortDirection: paginationData.sortDirection,
     };
-    return await this.blogsService.getBlogs(dtoPagination, searchNameTerm);
+    return await this.blogsService.getBlogs(dtoPagination, [searchFilters]);
   }
   @Post()
   async createNewBlog(@Body() inputModel: BlogInputModelType) {

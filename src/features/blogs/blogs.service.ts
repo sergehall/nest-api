@@ -5,6 +5,7 @@ import {
   EntityPaginationType,
   Pagination,
   QueryPaginationType,
+  SearchFiltersType,
 } from '../../types/types';
 import * as uuid4 from 'uuid4';
 import { Injectable } from '@nestjs/common';
@@ -15,9 +16,8 @@ export class BlogsService {
 
   async getBlogs(
     dtoPagination: QueryPaginationType,
-    searchNameTerm: string,
+    searchFilters: SearchFiltersType,
   ): Promise<Pagination> {
-    const filter = { name: { $regex: searchNameTerm } };
     const pageNumber = dtoPagination.pageNumber;
     const startIndex = (dtoPagination.pageNumber - 1) * dtoPagination.pageSize;
     const pageSize = dtoPagination.pageSize;
@@ -36,10 +36,11 @@ export class BlogsService {
       field,
       direction,
     };
-    const blogs = await this.blogsRepository.getBlogs(entityPagination, [
-      filter,
-    ]);
-    const totalCount = await this.blogsRepository.countDocuments([filter]);
+    const blogs = await this.blogsRepository.getBlogs(
+      entityPagination,
+      searchFilters,
+    );
+    const totalCount = await this.blogsRepository.countDocuments(searchFilters);
     const pagesCount = Math.ceil(totalCount / pageSize);
     return {
       pagesCount: pagesCount,

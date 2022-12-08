@@ -1,5 +1,11 @@
 import { ObjectId } from 'mongodb';
+
 export type SortOrder = -1 | 1 | 'descending' | 'desc' | 'ascending' | 'asc';
+export type SearchFiltersType = {
+  searchNameTerm?: string;
+  searchLoginTerm?: string;
+  searchEmailTerm?: string;
+}[];
 //...............................................Errors
 export type ErrorType = {
   message: string;

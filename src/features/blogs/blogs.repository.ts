@@ -1,21 +1,28 @@
-import { BlogsEntityType, EntityPaginationType } from '../../types/types';
+import {
+  BlogsEntityType,
+  EntityPaginationType,
+  SearchFiltersType,
+} from '../../types/types';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
+import { CreateFiltersForDB } from '../../common/queries/pretFiltersToDB';
 
 @Injectable()
 export class BlogsRepository {
   constructor(
+    protected creatFiltersForDB: CreateFiltersForDB,
     @InjectModel('blogs')
     private blogsModel: mongoose.Model<BlogsEntityType>,
   ) {}
   async getBlogs(
     entityFindBlogs: EntityPaginationType,
-    filters: object[],
+    filters: SearchFiltersType,
   ): Promise<BlogsEntityType[]> {
+    const convertedForDBFilters = await this.creatFiltersForDB.prep(filters);
     return await this.blogsModel
       .find(
-        { $and: filters },
+        { $and: convertedForDBFilters },
         {
           _id: false,
           __v: false,
@@ -66,7 +73,10 @@ export class BlogsRepository {
   }
 
   async countDocuments([...filters]) {
-    return await this.blogsModel.countDocuments({ $and: filters });
+    const convertedForDBFilters = await this.creatFiltersForDB.prep(filters);
+    return await this.blogsModel.countDocuments({
+      $and: convertedForDBFilters,
+    });
   }
 
   async createBlogs(newBlog: BlogsEntityType): Promise<boolean> {

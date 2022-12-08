@@ -4,17 +4,17 @@ import { SortOrder } from '../../types/types';
 @Injectable()
 export class ParseQuery {
   static getPaginationData(query) {
-    let pageNumber = parseInt(<string>query.pageNumber);
-    let pageSize = parseInt(<string>query.pageSize);
-    let searchNameTerm = query.searchNameTerm?.toString();
+    let pageNumber: number = parseInt(<string>query.pageNumber);
+    let pageSize: number = parseInt(<string>query.pageSize);
+    let searchNameTerm: string = query.searchNameTerm?.toString();
     let searchLoginTerm: string = query.searchLoginTerm?.toString();
     let searchEmailTerm: string = query.searchEmailTerm?.toString();
-    let title = query.sitle?.toString();
-    let userName = query.searchName?.toString();
-    let searchTitle = query.searchTitle?.toString();
-    let code = query.sode?.toString();
-    let confirmationCode = query.sonfirmationCode?.toString();
-    let sortBy = query.sortBy?.toString();
+    let title: string = query.sitle?.toString();
+    let userName: string = query.searchName?.toString();
+    let searchTitle: string = query.searchTitle?.toString();
+    let code: string = query.sode?.toString();
+    let confirmationCode: string = query.sonfirmationCode?.toString();
+    let sortBy: string = query.sortBy?.toString();
     const querySortDirection: SortOrder = query?.sortDirection;
 
     if (!searchNameTerm) {
@@ -26,20 +26,20 @@ export class ParseQuery {
     if (!searchEmailTerm) {
       searchEmailTerm = '';
     }
-    if (!confirmationCode || confirmationCode.length === 0) {
-      confirmationCode = null;
+    if (!confirmationCode) {
+      confirmationCode = '';
     }
-    if (!code || code.length === 0) {
-      code = null;
+    if (!code) {
+      code = '';
     }
-    if (!searchTitle || searchTitle.length === 0) {
-      searchTitle = null;
+    if (!searchTitle) {
+      searchTitle = '';
     }
-    if (!title || title.length === 0) {
+    if (!title) {
       title = null;
     }
-    if (!userName || userName.length === 0) {
-      userName = null;
+    if (!userName) {
+      userName = '';
     }
     if (isNaN(pageNumber)) {
       pageNumber = 1;
