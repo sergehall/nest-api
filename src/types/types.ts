@@ -6,6 +6,11 @@ export type DtoQueryType = {
   searchLoginTerm?: string;
   searchEmailTerm?: string;
 }[];
+export type SearchFieldType = {
+  searchNameTerm?: string;
+  searchLoginTerm?: string;
+  searchEmailTerm?: string;
+};
 //...............................................Errors
 export type ErrorType = {
   message: string;

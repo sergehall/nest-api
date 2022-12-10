@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { SearchFieldType } from '../../types/types';
 
 const searchFilters = {
   searchNameTerm: 'name',
@@ -20,17 +21,17 @@ export class ConvertFiltersForDB {
     return this._convert([...rawFilters], searchUserFilters);
   }
 
-  async _convert([...rawFilters], searchFilters) {
+  async _convert([...rawFilters], searchFilters: SearchFieldType) {
     const convertedFilters = [];
     for (let i = 0, l = Object.keys(rawFilters).length; i < l; i++) {
       for (const key in rawFilters[i]) {
         if (
-          rawFilters[i].hasOwnProperty(key) &&
+          searchFilters.hasOwnProperty(key) &&
           rawFilters[i][key].length !== 0
         ) {
-          const newFilter = {};
-          newFilter[searchFilters[key]] = { $regex: rawFilters[i][key] };
-          convertedFilters.push(newFilter);
+          const convertedFilter = {};
+          convertedFilter[searchFilters[key]] = { $regex: rawFilters[i][key] };
+          convertedFilters.push(convertedFilter);
         } else {
           convertedFilters.push({});
         }
