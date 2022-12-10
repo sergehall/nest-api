@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './features/users/users.controller';
@@ -64,9 +59,6 @@ import { ConvertFiltersForDB } from './common/queries/convertFiltersForDB';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .exclude({ path: 'blogs', method: RequestMethod.GET }, 'blogs/(.*)')
-      .forRoutes(BlogsController);
+    consumer.apply(LoggerMiddleware).forRoutes(BlogsController);
   }
 }

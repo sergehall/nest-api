@@ -24,7 +24,10 @@ export class ConvertFiltersForDB {
     const convertedFilters = [];
     for (let i = 0, l = Object.keys(rawFilters).length; i < l; i++) {
       for (const key in rawFilters[i]) {
-        if (rawFilters[i].hasOwnProperty(key)) {
+        if (
+          rawFilters[i].hasOwnProperty(key) &&
+          rawFilters[i][key].length !== 0
+        ) {
           const newFilter = {};
           newFilter[searchFilters[key]] = { $regex: rawFilters[i][key] };
           convertedFilters.push(newFilter);
