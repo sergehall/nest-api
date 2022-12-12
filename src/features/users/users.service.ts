@@ -29,7 +29,7 @@ export class UsersService {
     const pageSize = dtoPagination.pageSize;
     let field = 'createdAt';
     if (dtoPagination.sortBy === 'login' || dtoPagination.sortBy === 'email') {
-      field = 'accountData.' + dtoPagination.sortBy;
+      field = dtoPagination.sortBy;
     }
     const direction = dtoPagination.sortDirection;
 
