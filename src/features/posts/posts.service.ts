@@ -31,8 +31,7 @@ export class PostsService {
       paginationData.sortBy === 'shortDescription' ||
       paginationData.sortBy === 'blogId' ||
       paginationData.sortBy === 'blogName' ||
-      paginationData.sortBy === 'content' ||
-      paginationData.sortBy === 'blogName'
+      paginationData.sortBy === 'content'
     ) {
       field = paginationData.sortBy;
     }
